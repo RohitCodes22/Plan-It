@@ -7,6 +7,8 @@ from flask import Flask, jsonify, request, send_from_directory
 from datetime import date
 from flask_cors import CORS
 import os
+import messagingService
+import eventService
 
 '''
 ----------------------
@@ -26,7 +28,13 @@ API Endpoints
 #------- HOME PAGE -------#
 @app.route('/')
 def home():
-    return '<h1>HOME</h1>'
+    return '<h1>Backend Online</h1>'
+
+
+@app.route('/login')
+def login():
+    # TODO: Implement authentication
+    return True
 
 
 '''
