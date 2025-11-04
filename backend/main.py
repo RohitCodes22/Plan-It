@@ -3,7 +3,7 @@
 Imports
 ----------------------
 '''
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, response
 from datetime import date
 from flask_cors import CORS
 import os
@@ -34,7 +34,7 @@ def home():
 @app.route('/login')
 def login():
     # TODO: Implement authentication
-    return True
+    return {'message': 'login successful'}, 200
 
 
 '''
