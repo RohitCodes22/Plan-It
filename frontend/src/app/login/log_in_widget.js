@@ -1,22 +1,43 @@
-export default function Home() {
+export default function LogInWidget() {
   return (
-    <div className="w-72 h-96 bg-gray-900 rounded-xl flex border-gray-100 border-2 flex-col">
-        <header className="flex-1 w-full rounded-t-xl flex items-center justify-center border-b-2 border-gray-100">
-            <h1 className="text-2xl text-center">Login</h1>
-        </header>
+    <div className="w-full flex flex-col gap-6">
+      <header className="text-center">
+        <h1 className="text-3xl font-bold">Login</h1>
+        <p className="text-sm text-gray-600">Welcome back! Please sign in.</p>
+      </header>
 
-        <div className="flex-4 flex flex-col">
-
-            <form className="m-3" method="post">
-                <label htmlFor="username">Username:</label>
-                <input className="border-gray-100 border-2 rounded-md mb-3" type="text" id="username" value={" "}/>
-
-                <label htmlFor="username">Password:</label>
-                <input className="border-gray-100 border-2 rounded-md mb-3" type="text" id="username" value={" "}/>
-
-                <button className="border-gray-100 border-2 rounded-md p-3 hover:scale-105 transition" type="submit">Log in</button>
-            </form>
+      <form className="flex flex-col gap-4" method="post">
+        <div className="flex flex-col gap-1">
+          <label htmlFor="username" className="text-sm font-medium">
+            Username
+          </label>
+          <input
+            className="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            type="text"
+            id="username"
+            name="username"
+          />
         </div>
+
+        <div className="flex flex-col gap-1">
+          <label htmlFor="password" className="text-sm font-medium">
+            Password
+          </label>
+          <input
+            className="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            type="password"
+            id="password"
+            name="password"
+          />
+        </div>
+
+        <button
+          className="w-full border rounded-md py-2 mt-2 hover:bg-gray-100 transition font-medium"
+          type="submit"
+        >
+          Log In
+        </button>
+      </form>
     </div>
   );
 }
