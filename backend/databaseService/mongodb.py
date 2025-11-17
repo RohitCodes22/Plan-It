@@ -20,8 +20,8 @@ db_sean = client_sean.get_database()
 def insert_test_data():
     #add a table worth of information as a starter for each user
     test_data = {
-        "name": "Test User",
-        "email": "testuser@example.com",
+        "name": "Test User 1",
+        "email": "testuser1@example.com",
         "tasks": [
             {"task": "Task 1", "completed": False},
             {"task": "Task 2", "completed": True}
@@ -41,4 +41,21 @@ if __name__ == "__main__":
     inserted_id = insert_test_data()
     print(f"Inserted test data with ID: {inserted_id}")
 
+
+
+
+
+'''
+Mock Functions
+'''
+def write_to_db(**kwargs):
+    print(f"Simulate writing to database: {kwargs}")
+    return True
+
+def retrieve_table(row):
+    if row == "event":
+        return {{"name": "event name", "tags": "fun"}, {"name": "event name", "tags": "fun"}}
+    
+    else:
+        return {{}}
 
