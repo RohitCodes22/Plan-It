@@ -23,6 +23,8 @@ class User:
         
         self.populate_user_from_row(user)
 
+    def verify_password(self, password):
+        return password == databaseService.decode_password(self.encoded_password)
     
     def populate_user_from_row(self, user):
         self.username = user.get("username")
@@ -30,6 +32,7 @@ class User:
         self.lname = user.get("lname")
         self.email = user.get("email")
         self.id = user.get("id")
+        self.encoded_password = user.get("password")
         
     def user_info_to_json_struct(self):
         info = {

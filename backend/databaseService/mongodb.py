@@ -61,10 +61,22 @@ def retrieve_table(row):
     
     if row == "user":
         return [
-            {"id": 0, "username": "spiderhit;)))",  "fname": "Rohit", "lname": "Shafe", "email": "rohit@hotmail.com"},
-            {"id": 1, "username": "dd", "fname": "Donald", "lname": "Duck", "email": "Donald@duck.com"},
-            {"id": 2, "username": "double m", "fname": "Mickey", "lname": "Mouse", "email": "MIckey@mouse.com"}
+            {"id": 0, "username": "spiderhit;)))", "password": "pass", "fname": "Rohit", "lname": "Shafe", "email": "rohit@hotmail.com"},
+            {"id": 1, "username": "dd", "password": "pass", "fname": "Donald", "lname": "Duck", "email": "Donald@duck.com"},
+            {"id": 2, "username": "double m", "password": "pass", "fname": "Mickey", "lname": "Mouse", "email": "MIckey@mouse.com"}
         ]
     else:
         return {{}}
+    
+    
+'''
+Password Security
+'''
+def decode_password(encoded_password):
+    #TODO: implement
+    return encoded_password
+
+def encode_password(password):
+    #TODO: implement
+    return password
 
