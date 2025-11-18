@@ -17,7 +17,10 @@ Application Setup
 '''
 app = Flask(__name__, static_folder='static')
 app.secret_key = "password"
-CORS(app, origins=["http://localhost:3000"]) # allow outside source (frontend)
+CORS(app,
+     resources={r"/*": {"origins": "http://localhost:3000"}},
+     supports_credentials=True)
+#CORS(app, origins=["http://localhost:3000"]) # allow outside source (frontend)
 UPLOAD_FOLDER = 'uploads/'  # Ensure this folder exists
 
 
