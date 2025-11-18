@@ -54,7 +54,10 @@ def write_to_db(**kwargs):
 
 def retrieve_table(row):
     if row == "event":
-        return {{"name": "event name", "tags": "fun"}, {"name": "event name", "tags": "fun"}}
+        return [
+            {"id": 0, "name": "Rohit's B-Day!", "tags": ["fun"], description: ""}, 
+            {"id": 1, "name": "event name",     "tags": ["fun"], description: ""}
+        ]
     
     else:
         return {{}}
