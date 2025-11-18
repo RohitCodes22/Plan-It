@@ -3,13 +3,13 @@
 Imports
 ----------------------
 '''
-from flask import Flask, jsonify, request, send_from_directory, response
+from flask import Flask, jsonify, request, send_from_directory, Response
 from datetime import date
 from flask_cors import CORS
 import os
-import messagingService
-import eventService
-
+#import messagingService
+#import eventService
+import userService
 '''
 ----------------------
 Application Setup
@@ -35,6 +35,17 @@ def home():
 def login():
     # TODO: Implement authentication
     return {'message': 'login successful'}, 200
+
+
+'''
+----------------------
+API User Endpoints
+----------------------
+'''
+@app.route('/get-user')
+def get_user():
+    user = userService.User(0)
+    return {"fname": user.username}, 200
 
 
 '''

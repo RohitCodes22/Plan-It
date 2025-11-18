@@ -12,15 +12,17 @@ class User:
         users = databaseService.retrieve_table("user")
         user = next(filter(lambda u: u["id"] == user_id, users), None)
         
+        print(user)
+        
         if not user:
             print("error getting user")
             return False
         
-        self.username = user.username
-        self.fname = user.fname
-        self.lname = user.lname
-        self.email = user.email
-        self.id = user.id
+        self.username = user.get("username")
+        self.fname = user.get("fname")
+        self.lname = user.get("lname")
+        self.email = user.get("email")
+        self.id = user.get("id")
         
     
 
