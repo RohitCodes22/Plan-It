@@ -63,7 +63,7 @@ def retrieve_table(row):
         return [
             {"id": 0, "fname": "Rohit", "lname": "Shafe", "email": "rohit@hotmail.com"},
             {"id": 1, "fname": "Donald", "lname": "Duck", "email": "Donald@duck.com"},
-            {"id": 0, "fname": "Mickey", "lname": "Mouse", "email": "MIckey@mouse.com"}
+            {"id": 2, "fname": "Mickey", "lname": "Mouse", "email": "MIckey@mouse.com"}
         ]
     else:
         return {{}}
