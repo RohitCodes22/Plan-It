@@ -1,4 +1,5 @@
 import smtplib, ssl
+import jinja2
 import os
 from email.mime.text import MIMEText
 
@@ -10,12 +11,6 @@ PORT = 465
 PASSWORD = get_password()
 SMTP_SERVER = "smtp.gmail.com"
 EMAIL_ADDRESS = "planit.notificationbot@gmail.com"
-
-test_message = """
-Subject: New events in your area!
-
-Rohit's very epic birthday party! (5.1 mi.)
-"""
 
 
 def send_email(message: object) -> int:
@@ -32,7 +27,7 @@ def send_email(message: object) -> int:
 
         return -1
 
-def generate_subscribed_event_email(event_data: list, user_id: int) -> object:
+def generate_subscribed_event_email(events: list, user_id: int) -> object:
     """
     Given an event's relevant data, create an email informing a subscribed user
     that the event will be re-occurring 
@@ -45,30 +40,38 @@ def generate_subscribed_event_email(event_data: list, user_id: int) -> object:
     }
     """
     # get user's real name and email
-    user_name = "Sean"
-    user_email = "swy62@umsystem.edu"
+    user_name = "Colin"
+    user_email = "cashpg@umsystem.edu"
 
     # populate this with actual event data
-    body = f"""\
+    body = """\
     <html>
         <body>
-            <p>Hi {user_name},<br><br>
+            <p>Hi {{user_name}},<br><br>
             
             Did you know some events you subscribed to are happening soon?<br>
             Here's a quick rundown:
             </p>
 
             <ol>
-                <li>
-                    <p>Rohit's database reveal (12/21/2025)</p>
-                </li>
+                {% for event in events %}
+                    <li> 
+                        {{event.name}}: {{event.date}}
+                    </li>
+                {% endfor %}
             </ol>
         </body>
     </html>
-
     """
-    msg = MIMEText(body, "HTML")
-    msg["Subject"] = f"{user_name}, subscribed events happening soon!"
+
+    body_template = jinja2.Template(body)
+    complete_body = body_template.render({
+        "user_name": user_name,
+        "events": events
+    })
+
+    msg = MIMEText(complete_body, "HTML")
+    msg["Subject"] = f"{user_name}, Your Subscribed Events Are Happening Soon!"
     msg["From"] = EMAIL_ADDRESS
     msg["To"] = user_email
 
@@ -76,5 +79,12 @@ def generate_subscribed_event_email(event_data: list, user_id: int) -> object:
 
 if __name__ == "__main__":
 
-    send_email(generate_subscribed_event_email([], 0))
+    send_email(
+        generate_subscribed_event_email([
+            {"name": "Rohit's database reveal!", "date": "11/22/2025"},
+            {"name": "Crumbl Cookie run", "date": "11/23/2025"},
+            ], 0
+        )
+    )
+
         
