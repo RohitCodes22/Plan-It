@@ -6,15 +6,21 @@ Imports
 from flask import Flask, jsonify, request, send_from_directory, Response, session
 from datetime import date
 from flask_cors import CORS
+import json
 import os
 #import messagingService
 #import eventService
 import userService
+import confluent_kafka
 '''
 ----------------------
 Application Setup
 ----------------------
 '''
+kafka_producer = confluent_kafka.Producer({
+    "bootstrap.servers": "localhost:9092"
+})
+
 app = Flask(__name__, static_folder='static')
 app.secret_key = "password"
 CORS(app,
@@ -102,6 +108,21 @@ def get_user_info(username):
 
     user = userService.User("username", username)
     return jsonify(user.user_info_to_json_struct()), SUCCESS
+
+
+"""
+----------------------
+API Event Endpoints (Kafka)
+----------------------
+"""
+def encode_event(event: dict) -> bytes:
+    return json.dumps(event).encode("utf-8")
+
+@app.route("/create_event/<event_name>", methods=["GET"]) # making GET just for testing in browser
+def create_event(event_name):
+    kafka_producer.produce("create_event", encode_event({"name": event_name}))
+    kafka_producer.flush(0)
+    return f"<h1>{event_name} created!</h1>"
 
 
 '''

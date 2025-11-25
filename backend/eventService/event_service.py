@@ -1,4 +1,4 @@
-import databaseService
+# import databaseService
 
 class Event:
     def __init__(self, name: str, tags: list, published_by: str, description: str):
@@ -19,9 +19,6 @@ def create_event(name: str, tags: list, description=""):
         "attendees": [],
         "comments": []
     }
-
-    databaseService.write_to_db(event_obj)
-
 
 def update_event(user_id: int, field: str, value: any):
     TABLE = "event"
