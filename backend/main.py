@@ -59,6 +59,10 @@ API Endpoints
 def home():
     return '<h1>Backend Online</h1>'
 
+@app.route('/signup', methods=['POST'])
+def signup():
+    pass
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -80,7 +84,7 @@ def login():
 
     return {'message': 'login successful'}, SUCCESS
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 def logout():
     session.clear()
     return {'message': 'logout successful'}, SUCCESS
@@ -91,7 +95,7 @@ API User Endpoints
 ----------------------
 '''
 
-@app.route('/get_user_info/<username>')
+@app.route('/get_user_info/<username>', methods=['GET'])
 def get_user_info(username):
     if not session.get('logged_in') or session.get('user_id') is None:
         return {'message': 'not logged in'}, AUTH_ERROR
