@@ -17,7 +17,10 @@ Application Setup
 '''
 app = Flask(__name__, static_folder='static')
 app.secret_key = "password"
-CORS(app, origins=["http://localhost:3000"]) # allow outside source (frontend)
+CORS(app,
+     resources={r"/*": {"origins": "http://localhost:3000"}},
+     supports_credentials=True)
+#CORS(app, origins=["http://localhost:3000"]) # allow outside source (frontend)
 UPLOAD_FOLDER = 'uploads/'  # Ensure this folder exists
 
 
@@ -61,13 +64,14 @@ def home():
 def login():
     data = request.get_json(silent=True) or {}
     username = data.get('username')
+    password = data.get('password')
 
     if not username:
         return {'message': 'username required'}, BAD_REQUEST
 
     user = userService.User("username", username)
 
-    if user is None:
+    if user is None or not user.verify_password(password):
         session['logged_in'] = False
         return {'message': 'invalid login'}, AUTH_ERROR
 
