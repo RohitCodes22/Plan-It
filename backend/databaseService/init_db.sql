@@ -1,0 +1,27 @@
+DROP TABLE IF EXISTS tasks;
+DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    fname VARCHAR(255),
+    lname VARCHAR(255),
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    tags JSON,
+    description TEXT
+);
+
+CREATE TABLE tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    task VARCHAR(255) NOT NULL,
+    completed BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
