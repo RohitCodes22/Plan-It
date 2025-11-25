@@ -1,5 +1,15 @@
 import databaseService
 
+class Event:
+    def __init__(self, name: str, tags: list, published_by: str, description: str):
+        self._name = name
+        self._tags = tags
+        self._published_by = published_by
+        self._description = description
+
+    
+
+
 def create_event(name: str, tags: list, description=""):
     event_obj = {
         "id": 0, # TODO: get this later
