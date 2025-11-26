@@ -65,10 +65,6 @@ API Endpoints
 def home():
     return '<h1>Backend Online</h1>'
 
-@app.route('/signup', methods=['POST'])
-def signup():
-    pass
-
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -123,6 +119,41 @@ def create_event(event_name):
     kafka_producer.produce("create_event", encode_event({"name": event_name}))
     kafka_producer.flush(0)
     return f"<h1>{event_name} created!</h1>"
+
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    data = request.get_json()
+
+    # Required fields
+    required = ["username", "fname", "lname", "email", "password"]
+    missing = [field for field in required if field not in data]
+
+    if missing:
+        return {
+            "message": f"Missing fields: {', '.join(missing)}"
+        }, 400
+
+    # Build event payload
+    event = {
+            "username": data["username"],
+            "fname": data["fname"],
+            "lname": data["lname"],
+            "email": data["email"],
+            "password": data["password"]
+        
+        }
+
+    # Produce event to Kafka
+    try:
+        kafka_producer.produce("create_user", encode_event(event))
+    except Exception as e:
+        print("Kafka error:", e)
+        return {"message": "Internal error"}, 500
+
+    return {
+        "message": "Signup request received. User creation in progress."
+    }, 202
 
 
 '''

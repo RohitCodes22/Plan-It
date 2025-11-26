@@ -1,5 +1,7 @@
 import databaseService
 
+USER_DB_TABLE = "users"
+
 class User:
     # def __init__(self, username, fname, lname, email, id):
     #     self.username = username
@@ -14,7 +16,7 @@ class User:
             key (str): primary key used to identify user
             value: value searching for
         '''
-        users = databaseService.retrieve_table("user")
+        users = databaseService.retrieve_table(USER_DB_TABLE)
         user = next(filter(lambda u: u[key] == value, users), None)
         
         if not user:
@@ -22,6 +24,35 @@ class User:
             return None
         
         self.populate_user_from_row(user)
+
+    @classmethod
+    def create_user(cls, username, fname, lname, email, password):
+        """
+        Creates a new user in the database, returns a User object.
+        """
+
+        encoded_pw = password# databaseService.encode_password(password)
+        user_data = {
+            "username": username,
+            "fname": fname,
+            "lname": lname,
+            "email": email,
+            "password": encoded_pw
+        }
+
+        # insert into db
+        new_id = databaseService.write_to_db("users", **user_data)
+
+        if new_id is None:
+            print("Error creating user")
+            return None
+
+        user_data["id"] = new_id
+        user_obj = cls.__new__(cls)
+        user_obj.populate_user_from_row(user_data)
+
+        return user_obj
+
 
     def verify_password(self, password):
         return password == databaseService.decode_password(self.encoded_password)
@@ -43,6 +74,16 @@ class User:
         }
         
         return info
+    
+    def save_to_db(self):
+        update_fields = {
+            "fname": self.fname,
+            "lname": self.lname,
+            "email": self.email,
+            "password": self.encoded_password,
+        }
+
+        #databaseService.update_row(USER_DB_TABLE, "username", self.username, update_fields)
         
         
     
