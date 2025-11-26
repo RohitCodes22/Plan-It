@@ -1,10 +1,16 @@
-# backend/Dockerfile
-FROM python:3.11-slim
+# Use full Python image for dev tools
+FROM python:3.11
 
-# # Set work directory
-# WORKDIR .
+WORKDIR /app
 
-# Copy requirements first to leverage caching
+# Install system dependencies for mysqlclient
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    default-libmysqlclient-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 COPY requirements.txt .
 
 # Install dependencies
@@ -16,9 +22,9 @@ COPY . .
 # Expose the port Flask runs on
 EXPOSE 80
 
-# Start both main.py and consumers.py using a process manager
-# You can use 'honcho', 'supervisord', or just a simple bash command
-RUN pip install gunicorn
+# Enable Flask auto-reload
+ENV FLASK_ENV=development
+ENV FLASK_APP=main.py
 
-# We'll run Flask with gunicorn and start consumers.py in the background
-CMD ["sh", "-c", "python consumers.py & python main.py"]
+# Run main.py and consumers.py separately in dev
+CMD ["sh", "-c", "python consumers.py & flask run --host=0.0.0.0 --port=80"]

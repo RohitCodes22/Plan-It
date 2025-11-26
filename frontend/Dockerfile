@@ -1,21 +1,16 @@
-# frontend/Dockerfile
-FROM node:20-alpine
+FROM node:20
 
-# # Set work directory
-# WORKDIR /app
+WORKDIR /app
 
-# Install dependencies
+# Copy package files first
 COPY package*.json ./
+
+# Install dependencies (including devDependencies)
 RUN npm install
 
-# Copy all files
+# Copy source code
 COPY . .
 
-# Build the Next.js app
-RUN npm run build
-
-# Expose the default Next.js port
 EXPOSE 3000
 
-# Start the app
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

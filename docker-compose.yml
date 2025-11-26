@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9" # optional, but good practice
 
 services:
   zookeeper:
@@ -25,26 +25,27 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   backend:
-    build: ./backend
-    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
     ports:
       - "5000:5000"
     environment:
       - FLASK_ENV=development
-    volumes:
-      - ./backend:/app
-    depends_on:
-      - db   # if you have a database service
 
   frontend:
-    build: ./frontend
-    container_name: frontend
-    ports:
-      - "3000:3000"
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     volumes:
       - ./frontend:/app
-    depends_on:
-      - backend
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
 
   db:
     image: mysql:8
