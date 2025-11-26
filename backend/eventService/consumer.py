@@ -3,7 +3,7 @@ import json
 import event_service
 
 CONSUMER = confluent_kafka.Consumer({
-    "bootstrap.servers": "localhost:9092",
+    "bootstrap.servers": "kafka:9092",
     "group.id": "backend-service",
     "auto.offset.reset": "earliest"
 })

@@ -18,13 +18,13 @@ Application Setup
 ----------------------
 '''
 kafka_producer = confluent_kafka.Producer({
-    "bootstrap.servers": "localhost:9092"
+    "bootstrap.servers": "kafka:9092"
 })
 
 app = Flask(__name__, static_folder='static')
 app.secret_key = "password"
 CORS(app,
-     resources={r"/*": {"origins": "http://localhost:3000"}},
+     resources={r"/*": {"origins": "http://frontend:3000"}},
      supports_credentials=True)
 #CORS(app, origins=["http://localhost:3000"]) # allow outside source (frontend)
 UPLOAD_FOLDER = 'uploads/'  # Ensure this folder exists
