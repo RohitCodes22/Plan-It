@@ -1,21 +1,22 @@
-# main_script.py
 import subprocess
+import time
 
-def main():
-    print("Parent script starting...")
+if __name__ == "__main__":
+    print("Parent script starting...", flush=True)
 
-    # Example 1: Running a simple command
-    print("\n--- Running a simple command ---")
-    try:
-        result = subprocess.run(
-            ["python", "-m", "userService.consumer"],  # remove .py
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        print(f"Command output: {result.stdout.strip()}")
-    except subprocess.CalledProcessError as e:
-        print(f"Error running command: {e}")
+    scripts = [
+        ["python", "-m", "userService.consumer"],
+    ]
 
+    processes = []
 
-main()
+    for script in scripts:
+        p = subprocess.Popen(script)
+        processes.append(p)
+        print(f"Started subprocess: {script}", flush=True)
+
+    # Wait for all subprocesses to finish
+    for p in processes:
+        p.wait()
+        time.sleep(2)
+        print("I waited", flush=True)

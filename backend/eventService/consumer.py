@@ -4,9 +4,9 @@ import event_service
 
 CONSUMER = confluent_kafka.Consumer({
     "bootstrap.servers": "kafka:9092",
-    "group.id": "backend-service",
-    "auto.offset.reset": "earliest"
 })
+
+
 
 CONSUMER.subscribe(["create_event"])
 print("Event handler thread started ....")
@@ -16,7 +16,7 @@ while True:
     if not incoming_msg:
         continue
     elif incoming_msg.error():
-        print("ERROR detected")
+        print("ERROR detected", flush=True)
         continue
 
     event = json.loads(incoming_msg.value().decode("utf-8"))

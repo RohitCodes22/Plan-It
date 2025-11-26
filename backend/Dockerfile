@@ -27,4 +27,4 @@ ENV FLASK_ENV=development
 ENV FLASK_APP=main.py
 
 # Run main.py and consumers.py separately in dev
-CMD ["sh", "-c", "python consumers.py & flask run --host=0.0.0.0 --port=80"]
+CMD ["sh", "-c", "flask run --host=0.0.0.0 --port=80"]

@@ -8,10 +8,10 @@ async function testSignup() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                username: "testUser2",
+                username: "testUser22",
                 fname: "Test",
                 lname: "User",
-                email: "testuse2r@example.com",
+                email: "testuse22r@example.com",
                 password: "mypassword123"
             })
         });
