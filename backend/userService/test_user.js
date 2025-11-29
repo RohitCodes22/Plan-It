@@ -49,11 +49,17 @@ async function testSignup() {
 }
 
 async function testGetEvents() {
+  await testLogin();
+
   try {
-    const response = await fetch(`http://localhost/user/get_user_events/spiderhit`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      `http://localhost:80/user/get_user_events/spiderhit`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // VERY IMPORTANT for Flask session cookies
+      }
+    );
 
     const data = await response.json();
 
@@ -64,7 +70,6 @@ async function testGetEvents() {
   }
 }
 
-testLogin()
 testGetEvents();
 
 //testSignup();

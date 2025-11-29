@@ -12,6 +12,7 @@ import os
 #import eventService
 import userService
 import confluent_kafka
+
 '''
 ----------------------
 Application Setup
@@ -23,8 +24,12 @@ kafka_producer = confluent_kafka.Producer({
 
 app = Flask(__name__, static_folder='static')
 app.secret_key = "password"
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = False   # True if HTTPS
+
+
 CORS(app,
-     resources={r"/*": {"origins": "*"}},
+     resources={r"/*": {"origins": "*"}}, #! Development Only !#
      supports_credentials=True)
 #CORS(app, origins=["http://localhost:3000"]) # allow outside source (frontend)
 UPLOAD_FOLDER = 'uploads/'  # Ensure this folder exists
