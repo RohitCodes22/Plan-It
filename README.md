@@ -51,10 +51,7 @@ Expected Outcomes:
 
 
 
-## Running Backend
-:( this will be dockerized soon
-
+## Running The Website
 1. Run docker-composer.yml with docker 
 ``` docker compose up ```
-1. Run the flask server ```python main.py ```
-1. Run the consumer threads ```python -m userService.consumer.py```
+1. Navigigate to http:\\\\localhost:300
