@@ -91,36 +91,7 @@ def logout():
     session.clear()
     return {'message': 'logout successful'}, SUCCESS
 
-'''
-----------------------
-API User Endpoints
-----------------------
-'''
-
-@app.route('/get_user_info/<username>', methods=['GET'])
-def get_user_info(username):
-    if not session.get('logged_in') or session.get('user_id') is None:
-        return {'message': 'not logged in'}, AUTH_ERROR
-
-    user = userService.User("username", username)
-    return jsonify(user.user_info_to_json_struct()), SUCCESS
-
-
-"""
-----------------------
-API Event Endpoints (Kafka)
-----------------------
-"""
-def encode_event(event: dict) -> bytes:
-    return json.dumps(event).encode("utf-8")
-
-@app.route("/create_event/<event_name>", methods=["GET"]) # making GET just for testing in browser
-def create_event(event_name):
-    kafka_producer.produce("create_event", encode_event({"name": event_name}))
-    kafka_producer.flush(0)
-    return f"<h1>{event_name} created!</h1>"
-
-
+#Kafka endpoint
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
@@ -154,6 +125,47 @@ def signup():
     return {
         "message": "Signup request received. User creation in progress."
     }, ACCEPTED
+
+
+'''
+----------------------
+API User Endpoints
+----------------------
+'''
+
+@app.route('/get_user_info/<username>', methods=['GET'])
+def get_user_info(username):
+    if not session.get('logged_in') or session.get('user_id') is None:
+        return {'message': 'not logged in'}, AUTH_ERROR
+
+    user = userService.User("username", username)
+    return jsonify(user.user_info_to_json_struct()), SUCCESS
+
+
+@app.route('/user/get_user_events/<username>', methods=['GET'])
+def get_user_events(username):
+    if not session.get('logged_in') or session.get('user_id') is None:
+        return {'message': 'not logged in'}, AUTH_ERROR
+    user = userService.User("username", username)
+    
+    if not user:
+        return BAD_REQUEST
+    
+    return jsonify(user.get_user_events()), SUCCESS
+
+"""
+----------------------
+API Event Endpoints (Kafka)
+----------------------
+"""
+def encode_event(event: dict) -> bytes:
+    return json.dumps(event).encode("utf-8")
+
+@app.route("/create_event/<event_name>", methods=["GET"]) # making GET just for testing in browser
+def create_event(event_name):
+    kafka_producer.produce("create_event", encode_event({"name": event_name}))
+    kafka_producer.flush(0)
+    return f"<h1>{event_name} created!</h1>"
 
 
 '''

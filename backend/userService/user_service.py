@@ -3,13 +3,6 @@ import databaseService
 USER_DB_TABLE = "users"
 
 class User:
-    # def __init__(self, username, fname, lname, email, id):
-    #     self.username = username
-    #     self.fname = fname
-    #     self.lname = lname
-    #     self.email = email
-    #     self.id = id
-        
     def __init__(self, key: str, value):        
         '''
         Args: 
@@ -17,6 +10,11 @@ class User:
             value: value searching for
         '''
         users = databaseService.retrieve_table(USER_DB_TABLE)
+        
+        if not users:
+            print("Error retriving users from db")
+            return None
+        
         user = next(filter(lambda u: u[key] == value, users), None)
         
         if not user:
@@ -41,7 +39,7 @@ class User:
         }
 
         # insert into db
-        new_id = databaseService.write_to_db("users", **user_data)
+        new_id = databaseService.write_to_db(USER_DB_TABLE, **user_data)
 
         if new_id is None:
             print("Error creating user")
@@ -75,16 +73,9 @@ class User:
         
         return info
     
-    def save_to_db(self):
-        update_fields = {
-            "fname": self.fname,
-            "lname": self.lname,
-            "email": self.email,
-            "password": self.encoded_password,
-        }
-
-        #databaseService.update_row(USER_DB_TABLE, "username", self.username, update_fields)
-        
+    def get_user_events(self):
+        events = databaseService.get_user_events(self.id)
+        return events        
         
     
 
@@ -95,3 +86,5 @@ class Moderator(User):
 class Admin(User):
     pass
         
+        
+

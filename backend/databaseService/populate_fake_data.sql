@@ -1,22 +1,32 @@
--- Fake users
-INSERT INTO users (username, password, fname, lname, email)
+-- ============================================================
+--   FAKE USERS
+-- ============================================================
+INSERT INTO users (username, password, fname, lname, email, role)
 VALUES 
-('spiderhit)))', 'pass', 'Rohit', 'Shafe', 'rohit@hotmail.com'),
-('dd', 'pass', 'Donald', 'Duck', 'Donald@duck.com'),
-('double m', 'pass', 'Mickey', 'Mouse', 'Mickey@mouse.com');
+('spiderhit', 'pass', 'Rohit', 'Shafe', 'rohit@hotmail.com', 'user'),
+('dd', 'pass', 'Donald', 'Duck', 'Donald@duck.com', 'user'),
+('doublem', 'pass', 'Mickey', 'Mouse', 'Mickey@mouse.com', 'user'),
+('owca', 'pass', 'major', 'monogram', 'mm@owca.com', 'user');
 
--- Fake events
-INSERT INTO events (name, tags, description)
+
+-- ============================================================
+--   FAKE EVENTS (Mickey = organizer)
+-- ============================================================
+INSERT INTO events (name, tags, description, organizer_id)
 VALUES
-("Rohit's B-Day!", JSON_ARRAY('fun'), ''),
-("event name",     JSON_ARRAY('fun'), '');
+("Rohit's B-Day!", JSON_ARRAY('fun', 'party'), 'Celebration event', 1),
+("Generic Event",  JSON_ARRAY('fun'), 'A simple event', 3);
 
--- Fake test user for task list
-INSERT INTO users (username, password, fname, lname, email)
-VALUES ('testuser', 'pass', 'Test', 'User', 'test@example.com');
+-- Save first event ID for attendees
+SET @event1 = 1;
+SET @event2 = 2;
 
--- Tasks for test user
-INSERT INTO tasks (user_id, task, completed)
+-- ============================================================
+--   EVENT ATTENDEES (Users attending event #1)
+-- ============================================================
+INSERT INTO event_attendees (event_id, user_id)
 VALUES
-(LAST_INSERT_ID(), 'Task 1', FALSE),
-(LAST_INSERT_ID(), 'Task 2', TRUE);
+(@event1, 1),  -- Rohit
+(@event1, 2),  -- Donald
+(@event1, 3);  -- Mickey
+
