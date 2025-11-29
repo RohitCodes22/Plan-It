@@ -24,7 +24,7 @@ kafka_producer = confluent_kafka.Producer({
 app = Flask(__name__, static_folder='static')
 app.secret_key = "password"
 CORS(app,
-     resources={r"/*": {"origins": "http://frontend:3000"}},
+     resources={r"/*": {"origins": "*"}},
      supports_credentials=True)
 #CORS(app, origins=["http://localhost:3000"]) # allow outside source (frontend)
 UPLOAD_FOLDER = 'uploads/'  # Ensure this folder exists
@@ -132,7 +132,7 @@ def signup():
     if missing:
         return {
             "message": f"Missing fields: {', '.join(missing)}"
-        }, 400
+        }, BAD_REQUEST
 
     # Build event payload
     event = {
@@ -149,11 +149,11 @@ def signup():
         kafka_producer.produce("create_user", encode_event(event))
     except Exception as e:
         print("Kafka error:", e)
-        return {"message": "Internal error"}, 500
+        return {"message": "Internal error"}, INTERNAL_SERVER_ERROR
 
     return {
         "message": "Signup request received. User creation in progress."
-    }, 202
+    }, ACCEPTED
 
 
 '''

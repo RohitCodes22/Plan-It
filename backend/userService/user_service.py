@@ -55,7 +55,7 @@ class User:
 
 
     def verify_password(self, password):
-        return password == databaseService.decode_password(self.encoded_password)
+        return password == databaseService.decode_password("", self.encoded_password)
     
     def populate_user_from_row(self, user):
         self.username = user.get("username")
