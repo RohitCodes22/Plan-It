@@ -1,4 +1,5 @@
-# import databaseService
+from databaseService import mysql_driver
+import json
 
 class Event:
     def __init__(self, name: str, tags: list, published_by: str, description: str):
@@ -7,18 +8,16 @@ class Event:
         self._published_by = published_by
         self._description = description
 
-    
-
 
 def create_event(name: str, tags: list, description=""):
-    event_obj = {
-        "id": 0, # TODO: get this later
-        "name": name,
-        "tags": tags,
-        "description": description,
-        "attendees": [],
-        "comments": []
-    }
+    """
+    Takes relevant data and initializes an event in the Events table
+    """
+    mysql_driver.write_to_db("Events",
+        name=name,
+        tags=json.dumps(tags),
+        description=description
+    )
 
 def update_event(user_id: int, field: str, value: any):
     TABLE = "event"
@@ -53,3 +52,8 @@ def generate_event_feed(user_locaton: tuple, filters: set, max_distance: float, 
 
     # Write a MongoDB query to do this searching efficiently. I think MongoDB 
     # has built-in support for filtering based on distance, so should be easy
+
+
+# for testing the file's functionality
+if __name__ == "__main__":
+    create_event("Rohit's Foot Appointment", ["fun", "important"], "BRUH")
