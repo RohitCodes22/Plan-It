@@ -12,6 +12,7 @@ import os
 import eventService
 import userService
 import confluent_kafka
+import databaseService
 
 '''
 ----------------------
@@ -172,6 +173,10 @@ def create_event(event_name):
     kafka_producer.flush(0)
     return f"<h1>{event_name} created!</h1>"
 
+@app.route("/get_event/<event_id>", methods=["GET"])
+def get_event(event_id: int):
+    e = eventService.Event.read_event(event_id)
+    return f"<h1> {e} </h1>"
 
 '''
 ----------------------
@@ -179,5 +184,4 @@ Application Startup
 ----------------------
 '''
 if __name__ == '__main__':
-
     app.run(host='0.0.0.0', port=80, debug=True)

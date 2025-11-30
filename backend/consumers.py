@@ -6,6 +6,7 @@ if __name__ == "__main__":
 
     scripts = [
         ["python", "-m", "userService.consumer"],
+        # ["python", "-m", "eventService.consumer"]
     ]
 
     processes = []

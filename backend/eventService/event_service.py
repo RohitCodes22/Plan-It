@@ -13,11 +13,11 @@ class Event:
         self._description = description
 
     @classmethod
-    def read_event(cls, id: int):
+    def read_event(cls, e_id: int):
         """
         Reading in from a the database
         """
-        pass
+        return databaseService.get_event_by_id(e_id)
 
     @classmethod
     def write_event(cls, name: str, tags: list, organizer_id: int, description: str):

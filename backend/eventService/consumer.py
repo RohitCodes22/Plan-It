@@ -2,10 +2,18 @@ import confluent_kafka
 import json
 import event_service
 
-CONSUMER = confluent_kafka.Consumer({
-    "bootstrap.servers": "kafka:9092",
-})
-
+ATTEMPTS = 10
+for _ in range(ATTEMPTS):
+    try:
+        CONSUMER = confluent_kafka.Consumer({
+            "bootstrap.servers": "kafka:9092",
+            "group.id": "backend-service",
+            "auto.offset.reset": "earliest"
+        })
+        break
+    except Exception as e:
+        print(f"Error connecting to Kafka ({e}). Retrying in 5s")
+        time.sleep(5)
 
 
 CONSUMER.subscribe(["create_event"])
@@ -25,7 +33,7 @@ while True:
 
     # go through possible event topics
     if topic == "create_event":
-        event_service.create_event(event["name"], [])
+        event_service.Event.write_event(event["name"], [], 1, "bruh")
         print("Event created!")
     else: # does not match any known event topics
         print(f"ERROR: unknown event topic passed in: {topic}")
