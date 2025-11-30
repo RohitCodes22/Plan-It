@@ -97,12 +97,12 @@ API User Endpoints
 ----------------------
 '''
 
-@app.route('/get_user_info/<username>', methods=['GET'])
+@app.route('/get_user_info/', methods=['GET'])
 def get_user_info(username):
     if not session.get('logged_in') or session.get('user_id') is None:
         return {'message': 'not logged in'}, AUTH_ERROR
 
-    user = userService.User("username", username)
+    user = userService.User("id", session["user_id"])
     return jsonify(user.user_info_to_json_struct()), SUCCESS
 
 
