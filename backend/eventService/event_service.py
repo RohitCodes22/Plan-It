@@ -1,12 +1,41 @@
-from databaseService import mysql_driver
+import databaseService
 import json
 
 class Event:
-    def __init__(self, name: str, tags: list, published_by: str, description: str):
+
+    def __init__(self, name: str, tags: list, organizer_id: int, description: str):
+        """
+        Writing a new event to the database
+        """
         self._name = name
         self._tags = tags
-        self._published_by = published_by
+        self._published_by = organizer_id
         self._description = description
+
+    @classmethod
+    def read_event(cls, id: int):
+        """
+        Reading in from a the database
+        """
+        pass
+
+    @classmethod
+    def write_event(cls, name: str, tags: list, organizer_id: int, description: str):
+        event_id = databaseService.write_to_db(
+            "events",
+            name=name,
+            tags=tags, # jsonify this for the DB
+            description=description,
+            organizer_id=organizer_id
+        )
+
+        if not event_id:
+            print(f"Error creating event '{name}'")
+        else:
+            print(f"success creating event '{name}'. New ID is {event_id}")
+
+        return cls(name, tags, organizer_id, description)
+    
 
 
 def create_event(name: str, tags: list, description=""):
@@ -56,4 +85,10 @@ def generate_event_feed(user_locaton: tuple, filters: set, max_distance: float, 
 
 # for testing the file's functionality
 if __name__ == "__main__":
-    create_event("Rohit's Foot Appointment", ["fun", "important"], "BRUH")
+    print("working!")
+    event = Event.write_event(
+        "CS-4090 Work session", 
+        ["not fun", "Mia", "CBT"], 
+        1,
+        "Join us as we try to wrap our feeble minds around low-cohesion databases"
+    )

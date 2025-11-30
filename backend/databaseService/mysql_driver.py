@@ -254,7 +254,16 @@ def get_user_events(user_id):
         DB.close()
         return []
 
-
+# ============================================================
+#   COMMENT OPERATIONS
+# ============================================================
+def add_comment(event_id, user_id, contents):
+    return write_to_db(
+        "comments",
+        event_id=event_id,
+        user_id=user_id,
+        contents=contents
+    )
 
 # ============================================================
 #   PASSWORD HASHING (SECURE)

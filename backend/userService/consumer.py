@@ -1,12 +1,22 @@
 import confluent_kafka
 import json
 import userService
+import time
 
-CONSUMER = confluent_kafka.Consumer({
-    "bootstrap.servers": "kafka:9092",
-    "group.id": "backend-service",
-    "auto.offset.reset": "earliest"
-})
+ATTEMPTS = 10
+for _ in range(ATTEMPTS):
+    try:
+        CONSUMER = confluent_kafka.Consumer({
+            "bootstrap.servers": "kafka:9092",
+            "group.id": "backend-service",
+            "auto.offset.reset": "earliest"
+        })
+        break
+    except Exception as e:
+        print(f"Error connecting to Kafka ({e}). Retrying in 5s")
+        time.sleep(5)
+
+
 
 CONSUMER.subscribe(["create_user"])
 print("Event handler thread started ....", flush=True)

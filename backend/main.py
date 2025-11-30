@@ -9,7 +9,7 @@ from flask_cors import CORS
 import json
 import os
 #import messagingService
-#import eventService
+import eventService
 import userService
 import confluent_kafka
 
