@@ -1,5 +1,6 @@
 -- Drop existing tables if they exist
 DROP TABLE IF EXISTS event_attendees;
+DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS tasks;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS users;
@@ -23,6 +24,17 @@ CREATE TABLE events (
     description TEXT,
     organizer_id INT NOT NULL,
     FOREIGN KEY (organizer_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_id INT,
+    user_id INT NOT NULL,
+    contents VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    been_updated BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (event_id) REFERENCES events(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- Join table to track event attendees (many-to-many)

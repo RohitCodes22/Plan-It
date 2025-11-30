@@ -137,3 +137,13 @@ INSERT INTO event_attendees (event_id, user_id) VALUES
 (14, 16),
 (14, 5),
 (14, 11);
+
+
+-- ============================================================
+--   COMMENTS
+-- ============================================================
+-- Rohit's B-day
+INSERT INTO comments (event_id, user_id, contents) VALUES
+(1, 6, "unc."),
+(1, 5, "No Crumbl Cookies. 0/10."),
+(1, 9, "Thank you Rohit, very cool.");
