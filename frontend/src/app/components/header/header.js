@@ -12,7 +12,7 @@ export default function Header() {
           Login
         </a>
         <a
-          href="/sign-up"
+          href="/signup"
           className="text-sm px-4 py-2 rounded-xl border border-black hover:bg-gray-100 transition"
         >
           Sign Up
