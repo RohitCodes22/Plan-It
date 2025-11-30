@@ -148,11 +148,13 @@ def get_user_info():
     return jsonify(user.user_info_to_json_struct()), SUCCESS
 
 
-@app.route('/user/get_user_events/<username>', methods=['GET'])
-def get_user_events(username):
+@app.route('/user/get_user_events', methods=['GET'])
+def get_user_events():
     if not session.get('logged_in') or session.get('user_id') is None:
         return {'message': 'not logged in'}, AUTH_ERROR
-    user = userService.User("username", username)
+    
+    
+    user = userService.User("id", session["user_id"])
     
     if not user:
         return BAD_REQUEST
