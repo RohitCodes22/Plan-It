@@ -2,6 +2,7 @@ import React from "react";
 import { FaHome, FaSearch } from "react-icons/fa";
 import { MdEventAvailable } from "react-icons/md";
 import { FaMapLocationDot } from "react-icons/fa6";
+import { GoPersonFill } from "react-icons/go";
 
 const BottomNavBar = () => {
   return (
@@ -18,6 +19,9 @@ const BottomNavBar = () => {
         </a>
         <a href="/TODO">
           <FaMapLocationDot />
+        </a>
+        <a href="/profile">
+          <GoPersonFill />
         </a>
       </nav>
     </div>

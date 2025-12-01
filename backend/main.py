@@ -25,8 +25,6 @@ kafka_producer = confluent_kafka.Producer({
 
 app = Flask(__name__, static_folder='static')
 app.secret_key = "password"
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'
-app.config['SESSION_COOKIE_SECURE'] = False   # True if HTTPS
 
 
 CORS(app,
@@ -89,7 +87,6 @@ def login():
 
     session['user_id'] = user.id
     session['logged_in'] = True
-
     return {'message': 'login successful'}, SUCCESS
 
 @app.route('/logout', methods=['POST'])
@@ -139,7 +136,7 @@ API User Endpoints
 ----------------------
 '''
 
-@app.route('/get_user_info/', methods=['GET'])
+@app.route('/get_user_info', methods=['GET'])
 def get_user_info():
     if not session.get('logged_in') or session.get('user_id') is None:
         return {'message': 'not logged in'}, AUTH_ERROR
