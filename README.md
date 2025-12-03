@@ -47,3 +47,11 @@ Expected Outcomes:
 - Allow users to plan and create events
 - Allow users to sign up for interesting events
 - Allow users to make “friends” and send direct messages to those contacts
+
+
+
+
+## Running The Website
+1. Run docker-composer.yml with docker 
+``` docker compose up ```
+1. Navigigate to http:\\\\localhost:300

@@ -1,1 +1,1 @@
-from .event_service import EventService
+from .event_service import *
