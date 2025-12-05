@@ -25,8 +25,6 @@ kafka_producer = confluent_kafka.Producer({
 
 app = Flask(__name__, static_folder='static')
 app.secret_key = "password"
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'
-app.config['SESSION_COOKIE_SECURE'] = False   # True if HTTPS
 
 
 CORS(app,
@@ -89,7 +87,6 @@ def login():
 
     session['user_id'] = user.id
     session['logged_in'] = True
-
     return {'message': 'login successful'}, SUCCESS
 
 @app.route('/logout', methods=['POST'])
@@ -139,20 +136,22 @@ API User Endpoints
 ----------------------
 '''
 
-@app.route('/get_user_info/<username>', methods=['GET'])
-def get_user_info(username):
+@app.route('/get_user_info', methods=['GET'])
+def get_user_info():
     if not session.get('logged_in') or session.get('user_id') is None:
         return {'message': 'not logged in'}, AUTH_ERROR
 
-    user = userService.User("username", username)
+    user = userService.User("id", session["user_id"])
     return jsonify(user.user_info_to_json_struct()), SUCCESS
 
 
-@app.route('/user/get_user_events/<username>', methods=['GET'])
-def get_user_events(username):
+@app.route('/user/get_user_events', methods=['GET'])
+def get_user_events():
     if not session.get('logged_in') or session.get('user_id') is None:
         return {'message': 'not logged in'}, AUTH_ERROR
-    user = userService.User("username", username)
+    
+    
+    user = userService.User("id", session["user_id"])
     
     if not user:
         return BAD_REQUEST

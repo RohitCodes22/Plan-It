@@ -9,8 +9,9 @@ export default function SignUpPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState(""); 
   const [message, setMessage] = useState("");
-  const [age, setAge] = useState(0);
-
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   console.log('my url', API_URL)
 
   const handleSubmit = async (e) => {
@@ -18,15 +19,18 @@ export default function SignUpPage() {
 
     try {
       console.log('my url', API_URL)
-      const response = await fetch(`${API_URL}/login`, {
+      const response = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include", // VERY IMPORTANT for Flask session cookies
         body: JSON.stringify({
+          fname: firstName,
+          lname: lastName,
+          email: email,
           username: username,
-          password: password, // ignored by backend unless implemented
+          password: password, 
         }),
       });
 
@@ -54,22 +58,43 @@ export default function SignUpPage() {
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-1">
-          <label htmlFor="name" className="text-sm font-medium">
-            Name
+          <label htmlFor="firstName" className="text-sm font-medium">
+            First Name
           </label>
           <input
             className="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
             type="text"
-            id="name"
-            name="name"
+            id="firstName"
+            name="firstName"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
           />
         </div>
-        <div className="flex flex-col gap-2">
-            <label>Date of Birth</label>
-            <input
-                type="date"
-                className="border p-2 rounded"
-            />
+        <div className="flex flex-col gap-1">
+          <label htmlFor="lastName" className="text-sm font-medium">
+            Last Name
+          </label>
+          <input
+            className="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            type="text"
+            id="lastName"
+            name="lastName"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="email" className="text-sm font-medium">
+            Email
+          </label>
+          <input
+            className="border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            type="text"
+            id="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="username" className="text-sm font-medium">
