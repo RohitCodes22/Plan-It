@@ -3,6 +3,7 @@ import { API_URL } from "../api";
 import { useRouter } from "next/navigation";
 import  TagWidget from "./tag_widget";
 import CommentWidget from "./comment";
+import CommentInput from "./comment_input";
 
 export default function EventWidget() {
   const router = useRouter();
@@ -37,6 +38,7 @@ export default function EventWidget() {
             <h2 className="text-2xl font-semibold"> Comments </h2>
             <hr/>
             <div className="mt-3">
+                <CommentInput/>
                 <CommentWidget
                   username="SpiderHit"
                   text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
