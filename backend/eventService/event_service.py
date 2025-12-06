@@ -83,12 +83,28 @@ def generate_event_feed(user_locaton: tuple, filters: set, max_distance: float, 
     # has built-in support for filtering based on distance, so should be easy
 
 
+def get_events_within_distance(lat: float, long: float, distance: float):
+    """
+    Returns events that are within a set distance
+    
+    lat: latitude of request
+    long: longitutde of request
+    distance: straight line distance in meters
+    """
+    
+    events = databaseService.get_events_in_range(lat, long, distance)
+    return events
+    
+
+
 # for testing the file's functionality
 if __name__ == "__main__":
     print("working!")
-    event = Event.write_event(
-        "CS-4090 Work session", 
-        ["not fun", "Mia", "CBT"], 
-        1,
-        "Join us as we try to wrap our feeble minds around low-cohesion databases"
-    )
+    # event = Event.write_event(
+    #     "CS-4090 Work session", 
+    #     ["not fun", "Mia", "CBT"], 
+    #     1,
+    #     "Join us as we try to wrap our feeble minds around low-cohesion databases"
+    # )
+    
+    print(get_events_within_distance(-91.77153, 37.948544, 5000))

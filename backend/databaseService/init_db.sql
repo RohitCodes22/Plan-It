@@ -16,16 +16,19 @@ CREATE TABLE users (
     role VARCHAR(50) NOT NULL DEFAULT 'user'
 );
 
--- Events table
+-- Events table with spatial index
 CREATE TABLE events (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     tags JSON,
     description TEXT,
     organizer_id INT NOT NULL,
+    location POINT NOT NULL SRID 4326,
+    SPATIAL INDEX (location),
     FOREIGN KEY (organizer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Comments table
 CREATE TABLE comments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     event_id INT,

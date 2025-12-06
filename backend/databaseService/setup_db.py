@@ -34,7 +34,7 @@ def run_sql_file(path):
 
 def init_db():
     """Creates database tables."""
-    run_sql_file("init_db.sql")
+    run_sql_file("init.sql")
 
 
 def populate_fake_data():
@@ -50,9 +50,6 @@ def setup_database():
     """
     print("Initializing database schema...")
     init_db()
-
-    print("Populating fake data...")
-    populate_fake_data()
 
     print("Database setup complete!")
 

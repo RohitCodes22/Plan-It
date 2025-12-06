@@ -177,6 +177,19 @@ def get_event(event_id: int):
     e = eventService.Event.read_event(event_id)
     return f"<h1> {e} </h1>"
 
+@app.get("/events/nearby")
+def get_events_nearby():
+    try:
+        lat = float(request.args.get("lat"))
+        lng = float(request.args.get("lng"))
+        distance = float(request.args.get("distance"))  # meters
+    except (TypeError, ValueError):
+        return jsonify({"error": "lat, lng, distance must be valid numbers"}), BAD_REQUEST
+
+    events = eventService.get_events_within_distance(lat, lng, distance)
+    print(events, flush=True)
+    return jsonify(events), SUCCESS
+
 '''
 ----------------------
 Application Startup
