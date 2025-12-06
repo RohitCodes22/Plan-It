@@ -16,16 +16,20 @@ CREATE TABLE users (
     role VARCHAR(50) NOT NULL DEFAULT 'user'
 );
 
--- Events table
+-- Events table with spatial index
 CREATE TABLE events (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     tags JSON,
     description TEXT,
     organizer_id INT NOT NULL,
+    location POINT NOT NULL SRID 4326,
+    SPATIAL INDEX(location),
     FOREIGN KEY (organizer_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+
+-- Comments table
 CREATE TABLE comments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     event_id INT,
@@ -58,7 +62,7 @@ VALUES
 ('owca', 'pass', 'Major', 'Monogram', 'mm@owca.com', 'user'),
 
 -- New requested users
-('colins', 'pass', 'Colin', 'Smith', 'colin@example.com', 'user'),
+('colins', 'youWillNeverGuess', 'Colin', 'Smith', 'colin@example.com', 'user'),
 ('seanwalsh', 'pass', 'Sean', 'Walsh', 'sean@example.com', 'user'),
 
 -- Fun characters
@@ -75,25 +79,65 @@ VALUES
 
 
 -- ============================================================
---   FAKE EVENTS
+--   FAKE EVENTS (ALL NEAR ROLLA, MO)
 -- ============================================================
-INSERT INTO events (name, tags, description, organizer_id)
+INSERT INTO events (name, tags, description, organizer_id, location)
 VALUES
-("Rohit's B-Day!", JSON_ARRAY('fun', 'party'), 'Celebration event', 1),
-("Generic Event",  JSON_ARRAY('fun'), 'A simple event', 3),
+("Rohit's B-Day!", JSON_ARRAY('fun', 'party'), 'Celebration event', 1,
+    ST_SRID(POINT(-91.771530, 37.948544), 4326)
+),
 
-("Study Session: Algorithms", JSON_ARRAY('study', 'serious'), '3-hour grind sesh', 5),
-("Boys Night: Pizza & COD", JSON_ARRAY('gaming', 'fun'), 'LAN party + pizza', 6),
-("Continental Meetup", JSON_ARRAY('action', 'serious'), 'No guns on company property.', 7),
-("Council of Elrond", JSON_ARRAY('fantasy', 'middle-earth'), 'Discussing ring-related issues.', 8),
-("Swamp BBQ", JSON_ARRAY('food', 'chaos'), 'You’re invited. Donkey not included.', 9),
-("Dueling Club", JSON_ARRAY('magic', 'danger'), 'Expelliarmus only... please.', 10),
-("Star Command Briefing", JSON_ARRAY('space'), 'To infinity... AND BEYOND!', 11),
-("Malibu Dream Party", JSON_ARRAY('pink', 'fashion'), 'Dress code: Fabulous.', 12),
-("Family Cookout", JSON_ARRAY('family', 'cars'), 'Nothing stronger than family.', 13),
-("Scooby Snack Taste Test", JSON_ARRAY('food', 'mystery'), 'Ruh roh?', 14),
-("Jedi Meditation Circle", JSON_ARRAY('force', 'calm'), 'Much peace. Very quiet.', 15),
-("Stark Expo Demo", JSON_ARRAY('tech', 'showcase'), 'New tech reveal. No explosions expected.', 16);
+("Generic Event", JSON_ARRAY('fun'), 'A simple event', 3,
+    ST_SRID(POINT(-91.773100, 37.949200), 4326)
+),
+
+("Study Session: Algorithms", JSON_ARRAY('study', 'serious'), '3-hour grind sesh', 5,
+    ST_SRID(POINT(-91.770400, 37.947900), 4326)
+),
+
+("Boys Night: Pizza & COD", JSON_ARRAY('gaming', 'fun'), 'LAN party + pizza', 6,
+    ST_SRID(POINT(-91.772800, 37.946300), 4326)
+),
+
+("Continental Meetup", JSON_ARRAY('action', 'serious'), 'No guns on company property.', 7,
+    ST_SRID(POINT(-91.769900, 37.949900), 4326)
+),
+
+("Council of Elrond", JSON_ARRAY('fantasy', 'middle-earth'), 'Discussing ring-related issues.', 8,
+    ST_SRID(POINT(-91.770800, 37.950400), 4326)
+),
+
+("Swamp BBQ", JSON_ARRAY('food', 'chaos'), 'You’re invited. Donkey not included.', 9,
+    ST_SRID(POINT(-91.771200, 37.947300), 4326)
+),
+
+("Dueling Club", JSON_ARRAY('magic', 'danger'), 'Expelliarmus only... please.', 10,
+    ST_SRID(POINT(-91.772200, 37.948800), 4326)
+),
+
+("Star Command Briefing", JSON_ARRAY('space'), 'To infinity... AND BEYOND!', 11,
+    ST_SRID(POINT(-91.770500, 37.949100), 4326)
+),
+
+("Malibu Dream Party", JSON_ARRAY('pink', 'fashion'), 'Dress code: Fabulous.', 12,
+    ST_SRID(POINT(-91.773500, 37.947700), 4326)
+),
+
+("Family Cookout", JSON_ARRAY('family', 'cars'), 'Nothing stronger than family.', 13,
+    ST_SRID(POINT(-91.772600, 37.949500), 4326)
+),
+
+("Scooby Snack Taste Test", JSON_ARRAY('food', 'mystery'), 'Ruh roh?', 14,
+    ST_SRID(POINT(-91.771800, 37.948200), 4326)
+),
+
+("Jedi Meditation Circle", JSON_ARRAY('force', 'calm'), 'Much peace. Very quiet.', 15,
+    ST_SRID(POINT(-91.769300, 37.948700), 4326)
+),
+
+("Stark Expo Demo", JSON_ARRAY('tech', 'showcase'), 'New tech reveal. No explosions expected.', 16,
+    ST_SRID(POINT(-91.770900, 37.946900), 4326)
+);
 
 
 -- ============================================================
@@ -191,7 +235,6 @@ INSERT INTO event_attendees (event_id, user_id) VALUES
 -- ============================================================
 --   COMMENTS
 -- ============================================================
--- Rohit's B-day
 INSERT INTO comments (event_id, user_id, contents) VALUES
 (1, 6, "unc."),
 (1, 5, "No Crumbl Cookies. 0/10."),

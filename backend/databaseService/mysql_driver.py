@@ -1,6 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
-import bcrypt
+import bcrypt, json
 
 
 # ============================================================
@@ -167,7 +167,62 @@ def get_events_by_organizer(organizer_id):
         cursor.close()
         DB.close()
         return []
+    
 
+def parse_point_wkt(wkt: str):
+    """Convert WKT 'POINT(lng lat)' to a dict {'lat': ..., 'lng': ...}"""
+    wkt = wkt.replace("POINT(", "").replace(")", "")
+    lng_str, lat_str = wkt.split()
+    return {"lat": float(lat_str), "lng": float(lng_str)}
+
+def get_events_in_range(lat: float, long: float, distance: float):
+    DB = get_connection()
+    if DB is None:
+        return []
+
+    cursor = DB.cursor(dictionary=True)
+    try:
+        # Use parameterized query to prevent SQL injection
+        query = """
+            SELECT
+                id,
+                name,
+                tags,
+                description,
+                organizer_id,
+                ST_AsText(location) AS location,
+                ST_Distance_Sphere(
+                    location,
+                    ST_SRID(POINT(%s, %s), 4326)
+                ) AS distance
+            FROM events
+            WHERE ST_Distance_Sphere(
+                    location,
+                    ST_SRID(POINT(%s, %s), 4326)
+                ) <= %s
+            ORDER BY distance ASC;
+        """
+
+        # lng first, then lat for MySQL POINT(x,y)
+        params = (long, lat, long, lat, distance)
+        cursor.execute(query, params)
+        events = cursor.fetchall()
+
+        # Fix location and tags for JSON
+        for e in events:
+            e["location"] = parse_point_wkt(e["location"])
+            if "tags" in e and isinstance(e["tags"], str):
+                e["tags"] = json.loads(e["tags"])
+
+        return events
+
+    except Error as err:
+        print("Error retrieving events:", err)
+        return []
+
+    finally:
+        cursor.close()
+        DB.close()
 # ============================================================
 #   ATTENDEE OPERATIONS
 # ============================================================
