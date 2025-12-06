@@ -190,6 +190,22 @@ def get_events_nearby():
     print(events, flush=True)
     return jsonify(events), SUCCESS
 
+@app.route("/events/feed", methods=["POST"])
+def event_feed_endpoint():
+    data = request.get_json()
+
+    try:
+        lat = data["latitude"]
+        long = data["longitude"]
+        filters = set(data.get("filters", []))
+        max_distance = data["max_distance"]
+        num_events = data.get("num_events", -1)
+    except KeyError as e:
+        return jsonify({"error": f"Missing required field: {str(e)}"}), BAD_REQUEST
+
+    events = eventService.generate_event_feed((lat, long), filters, max_distance, num_events)
+    return jsonify(events), SUCCESS
+
 '''
 ----------------------
 Application Startup

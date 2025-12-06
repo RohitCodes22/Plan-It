@@ -73,11 +73,19 @@ def generate_event_feed(user_locaton: tuple, filters: set, max_distance: float, 
 
     user_location: (latitude: float, longitude: float),
     filters: set of string filters based on event-coordinator-defined tags
-    max_distance: float. Defined in miles
+    max_distance: float. Defined in meters
     num_events: int. If -1 then grab all applicable events
     """
 
-    pass
+    
+    lat, long = user_locaton
+    events_in_range = databaseService.get_events_in_range(lat, long, max_distance)
+    events = list(filter(lambda event: any(tag in filters for tag in event.get("tags")), events_in_range))
+    
+    if num_events > 0:
+        events = events[:num_events]
+    
+    return events
 
     # Write a MongoDB query to do this searching efficiently. I think MongoDB 
     # has built-in support for filtering based on distance, so should be easy
@@ -107,4 +115,5 @@ if __name__ == "__main__":
     #     "Join us as we try to wrap our feeble minds around low-cohesion databases"
     # )
     
-    print(get_events_within_distance(-91.77153, 37.948544, 5000))
+    #print(get_events_within_distance(-91.77153, 37.948544, 5000))
+    print(generate_event_feed(( 37.948544,-91.77153 ), "fun", 5000))
