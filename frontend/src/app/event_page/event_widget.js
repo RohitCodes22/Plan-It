@@ -10,6 +10,16 @@ export default function EventWidget(args) {
     const router = useRouter();
     const [organizerData, setOrganizerData] = useState(null);
     const [commentData, setCommentData] = useState(null);
+    
+    const onCommentCreate = (commentData) => {
+        setCommentData(curValue => {
+            return [...curValue, {
+                username: commentData.username,
+                contents: commentData.contents
+            }];
+            
+        });
+    }
 
     const getUserData = async () => {
         try {
@@ -78,10 +88,11 @@ export default function EventWidget(args) {
 
     function Comments(items) {
         return (<>
-            {items.map((item, map) => {
+            {items.map((item, index) => {
                 return <CommentWidget
                         username={item.username}
                         text={item.contents}
+                        key={index}
                     />
             })}
         </>);
@@ -121,7 +132,7 @@ export default function EventWidget(args) {
                 <h2 className="text-2xl font-semibold"> Comments </h2>
                 <hr/>
                 <div className="mt-3">
-                    <CommentInput/>
+                    <CommentInput callback={onCommentCreate}/>
                     {
                         commentData ? Comments(commentData) : "Loading CommentsS"
                     }
