@@ -144,6 +144,10 @@ def get_user_info():
     user = userService.User("id", session["user_id"])
     return jsonify(user.user_info_to_json_struct()), SUCCESS
 
+@app.route("/get_user_info/<user_id>", methods=["GET"])
+def get_user_public_info(user_id: int):
+    user = userService.User("id", int(user_id))
+    return jsonify(user.user_info_to_json_struct()), SUCCESS
 
 @app.route('/user/get_user_events', methods=['GET'])
 def get_user_events():

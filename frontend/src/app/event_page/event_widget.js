@@ -1,11 +1,34 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { API_URL } from "../api";
 import  TagWidget from "./tag_widget";
 import CommentWidget from "./comment";
 import CommentInput from "./comment_input";
+import { useEffect, useState } from "react";
 
 export default function EventWidget(args) {
     const router = useRouter();
+    const [organizerData, setOrganizerData] = useState(null);
+
+    const getUserData = async () => {
+        console.log(args);
+        try {
+            // get data from event table
+            const response = await fetch(`${API_URL}/get_user_info/${args.data.organizer_id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            const organizer = await response.json();
+            console.log(organizer)
+            setOrganizerData(organizer);
+
+        } catch (error) {
+            console.error("Error fetching organizer data:", error);
+        }
+    };
 
     function tagStringToList(itemsStr) {
         return (itemsStr.slice(1, itemsStr.length - 1).replaceAll('"', '')).split(',');
@@ -16,11 +39,15 @@ export default function EventWidget(args) {
         return (
             <ol className="flex flex-row gap-2 ml-2 mt-2"> 
                 {items.map((item, index) => {
-                    return <TagWidget text={item} color={colorList[index % colorList.length]}/> 
+                    return <TagWidget key={index} text={item} color={colorList[index % colorList.length]}/> 
                 })}
             </ol>
         );
     }
+
+    useEffect(() => {
+        getUserData();
+    }, []);
 
 
     return (
@@ -31,7 +58,11 @@ export default function EventWidget(args) {
         </header>
 
         <div className="flex flex-col gap-3">
-            <div className="rounded-2xl pl-3 pt-1 pb-1 pr-3 border-1 border-grey-100 w-fit"> Rohit Sayeeganesh</div>
+            <div className="rounded-2xl pl-3 pt-1 pb-1 pr-3 border border-grey-100 w-fit">
+                {
+                    organizerData ? organizerData.username : "Loading User..."            
+                }
+            </div>
             <div>
                 <h3 className="text-bold text-xl">Tags</h3>
                 {TagList(tagStringToList(args.data.tags))}
