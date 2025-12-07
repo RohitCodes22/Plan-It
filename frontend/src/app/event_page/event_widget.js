@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 export default function EventWidget(args) {
     const router = useRouter();
     const [organizerData, setOrganizerData] = useState(null);
+    const [commentData, setCommentData] = useState(null);
 
     const getUserData = async () => {
-        console.log(args);
         try {
             // get data from event table
             const response = await fetch(`${API_URL}/get_user_info/${args.data.organizer_id}`, {
@@ -31,7 +31,34 @@ export default function EventWidget(args) {
     };
 
     const getCommentData = async () => {
+        try {
+            // get data from event table
+            const response = await fetch(`${API_URL}/get_comments/${args.data.id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
 
+            const comments = await response.json();
+            setCommentData(comments);
+
+            for (let i = 0; i < comments.length; i++) {
+                const userResponse = await fetch(`${API_URL}/get_user_info/${comments[i].user_id}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                });
+                const userJson = await userResponse.json();
+                
+                comments[i].username = userJson.username;
+            }
+
+
+        } catch (error) {
+            console.error("Error fetching comments:", error);
+        }
     };
 
     function tagStringToList(itemsStr) {
@@ -49,8 +76,20 @@ export default function EventWidget(args) {
         );
     }
 
+    function Comments(items) {
+        return (<>
+            {items.map((item, map) => {
+                return <CommentWidget
+                        username={item.username}
+                        text={item.contents}
+                    />
+            })}
+        </>);
+    }
+
     useEffect(() => {
         getUserData();
+        getCommentData();
     }, []);
 
 
@@ -83,10 +122,9 @@ export default function EventWidget(args) {
                 <hr/>
                 <div className="mt-3">
                     <CommentInput/>
-                    <CommentWidget
-                        username="SpiderHit"
-                        text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
-                    />
+                    {
+                        commentData ? Comments(commentData) : "Loading CommentsS"
+                    }
                 </div>
             </div>
         </div>
