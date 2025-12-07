@@ -119,6 +119,25 @@ def get_user_by_username(username):
         cursor.close()
         DB.close()
         return None
+    
+def get_names_from_ids(ids: list[int]):
+    if not ids:
+        return []
+
+    DB = get_connection()
+    cursor = DB.cursor(dictionary=True)
+
+    placeholder = ",".join(["%s"] * len(ids))
+    query = f"""
+        SELECT id, fname, lname
+        FROM users
+        WHERE id IN ({placeholder})
+    """
+
+    cursor.execute(query, ids)
+    users = cursor.fetchall()
+    DB.close()
+    return users
 
 # ============================================================
 #   EVENT OPERATIONS
