@@ -79,8 +79,10 @@ def generate_event_feed(user_locaton: tuple, filters: set, max_distance: float, 
 
     
     lat, long = user_locaton
-    events_in_range = databaseService.get_events_in_range(lat, long, max_distance)
-    events = list(filter(lambda event: any(tag in filters for tag in event.get("tags")), events_in_range))
+    events = databaseService.get_events_in_range(lat, long, max_distance)
+    
+    if len(filters) > 0:
+        events = list(filter(lambda event: any(tag in filters for tag in event.get("tags")), events))
     
     if num_events > 0:
         events = events[:num_events]
