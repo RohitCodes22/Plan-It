@@ -1,18 +1,17 @@
 "use client";
-import { API_URL } from "../api";
 import { useRouter } from "next/navigation";
 import  TagWidget from "./tag_widget";
 import CommentWidget from "./comment";
 import CommentInput from "./comment_input";
 
-export default function EventWidget() {
+export default function EventWidget(args) {
   const router = useRouter();
 
   return (
     <div className="w-full flex flex-col gap-6">
       
       <header className="text-left">
-        <h1 className="text-3xl font-bold">Event Name</h1>
+        <h1 className="text-3xl font-bold">{args.data.name}</h1>
       </header>
 
       <div className="flex flex-col gap-3">
@@ -27,7 +26,7 @@ export default function EventWidget() {
             <h3 className="text-bold text-xl mt-4 font-semibold">Description</h3>
             <hr/>
             <div className="ml-2">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,</p>
+                <p>{args.data.description},</p>
             </div>
         </div>
 

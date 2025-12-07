@@ -175,7 +175,10 @@ def create_event(event_name):
 @app.route("/get_event/<event_id>", methods=["GET"])
 def get_event(event_id: int):
     e = eventService.Event.read_event(event_id)
-    return f"<h1> {e} </h1>"
+    print(f"event: {e}", flush=True)
+    if e == None:
+        return jsonify(e), NO_CONTENT 
+    return jsonify(e), SUCCESS
 
 @app.get("/events/nearby")
 def get_events_nearby():
