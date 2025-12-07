@@ -46,7 +46,7 @@ export const EventView = ({ events }) => {
         {sortedEvents.map((event) => (
           <Link
             key={event.event_id}
-            href={`/events/${event.event_id}`}
+            href={`/event_page/${event.event_id}`}
             className="border rounded-md p-3 hover:bg-gray-100 transition"
           >
             <h3 className="font-semibold">{event.event_name}</h3>
