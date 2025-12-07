@@ -232,6 +232,7 @@ def post_comment():
     # Required fields
     required = ["user_id", "event_id", "contents"]
     missing = [field for field in required if field not in data]
+    print(f"Missing fields in comment post: {missing}", flush=True)
 
     if missing:
         return {
@@ -239,7 +240,7 @@ def post_comment():
         }, BAD_REQUEST
 
     # write comment to DB
-    databaseService.add_comment(data["event_id"], data["user_id"], data["contents"])
+    databaseService.add_comment(str(data["event_id"]), str(data["user_id"]), data["contents"])
 
     return {
         "message": "comment received."
