@@ -203,11 +203,13 @@ def event_feed_endpoint():
 
     try:
         lat = data["latitude"]
+        print(data, flush=True)
         long = data["longitude"]
         filters = set(data.get("filters", []))
         max_distance = data["max_distance"]
         num_events = data.get("num_events", -1)
     except KeyError as e:
+        print(e, flush=True)
         return jsonify({"error": f"Missing required field: {str(e)}"}), BAD_REQUEST
 
     events = eventService.generate_event_feed((lat, long), filters, max_distance, num_events)

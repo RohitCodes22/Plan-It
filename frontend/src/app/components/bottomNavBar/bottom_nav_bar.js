@@ -8,7 +8,7 @@ const BottomNavBar = () => {
   return (
     <div className="fixed bottom-0 left-0 w-full bg-white shadow-md border-t-2 border-gray-200 flex justify-center">
       <nav className="flex items-center justify-center p-4 text-2xl gap-x-20">
-        <a href="/TODO">
+        <a href="/home">
           <FaHome />
         </a>
         <a href="/TODO">
@@ -17,7 +17,7 @@ const BottomNavBar = () => {
         <a href="/TODO">
           <MdEventAvailable />
         </a>
-        <a href="/TODO">
+        <a href="/map">
           <FaMapLocationDot />
         </a>
         <a href="/profile">
