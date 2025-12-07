@@ -222,10 +222,28 @@ API Comments Endpoints
 @app.route("/get_comments/<event_id>", methods=["GET"])
 def get_comments(event_id: str):
     comments = databaseService.get_comments(int(event_id))
-    print("\n\n\n\n\n\n", flush=True)
-    print((comments), flush=True)
     return comments, SUCCESS
 
+
+@app.route("/post_comment", methods=["POST"])
+def post_comment():
+    data = request.get_json()
+
+    # Required fields
+    required = ["user_id", "event_id", "contents"]
+    missing = [field for field in required if field not in data]
+
+    if missing:
+        return {
+            "message": f"Missing fields: {', '.join(missing)}"
+        }, BAD_REQUEST
+
+    # write comment to DB
+    databaseService.add_comment(data["event_id"], data["user_id"], data["contents"])
+
+    return {
+        "message": "comment received."
+    }, ACCEPTED
 '''
 ----------------------
 Application Startup

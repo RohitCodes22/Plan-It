@@ -1,7 +1,9 @@
 import React, { useRef, useState } from "react";
+import { API_URL } from "../api";
 
-export default function CommentInput() {
+export default function CommentInput(args) {
     const textareaRef = useRef(null);
+    const buttonRef = useRef(null);
     const [comment, setComment] = useState("");
 
     const isInputEmpty = () => {
@@ -20,6 +22,27 @@ export default function CommentInput() {
         textEl.style.height = textEl.scrollHeight + 'px';
     }
 
+    const buttonClick = async () => {
+        const buttonEl = buttonRef.current;
+        if (!buttonEl || isInputEmpty())
+            return;
+
+        
+        // call the callback function to instantly update UI
+        args.callback({
+            username: "MyUsername",
+            contents: comment
+        });
+
+        // const response = await fetch(`${API_URL}/post_comment`, {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     }
+        // });
+
+    }
+
     return (
         <div className="border-grey border rounded-xl mb-1.5 pl-2 pr-2">
             <textarea 
@@ -30,9 +53,10 @@ export default function CommentInput() {
                 >
             </textarea>
             <div className="w-full flex justify-end">
-                <button 
+                <button onClick={buttonClick}
                     className={`rounded-md pt-2 pb-2 pl-4 pr-4 m-1 transition-all 
                         ${isInputEmpty() ? "bg-gray-300 text-gray-500 " : "bg-blue-500 text-white hover:scale-105"}`}
+                    ref={buttonRef}
                     >
                     Comment
                 </button>
