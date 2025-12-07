@@ -13,14 +13,13 @@ export default function EventPage({params}) {
     
     const getEventData = async () => {
         try {
+            // get data from event table
             const response = await fetch(`${API_URL}/get_event/${resolvedParams.eventId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 }
             });
-
-            console.log(`Response status ${response.status}`);
 
             const eventData = await response.json();
             setEventData(eventData);
