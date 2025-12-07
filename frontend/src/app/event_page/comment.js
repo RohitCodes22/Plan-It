@@ -2,7 +2,7 @@ import React from "react";
 
 export default function CommentWidget(args) {
   return (
-    <div className="border-1 rounded-md">
+    <div className="border rounded-md">
         <div className="flex flex-row">
             <div className="h-8 w-8 rounded-full bg-blue-300 m-2 mr-4"></div>
             <div className="mt-2"> {args.username} </div>

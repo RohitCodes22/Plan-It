@@ -11,7 +11,7 @@ const colorMap = {
 
 export default function TagWidget(args) {
   return (
-    <li className={`transition-all select-none rounded border-1 border-grey-100 pl-1 pr-1 font-bold hover:scale-106 ${colorMap[args.color]}`}>
+    <li className={`transition-all select-none rounded border border-grey-100 pl-1 pr-1 font-bold hover:scale-106 ${colorMap[args.color]}`}>
         {args.text}
     </li>
   );
