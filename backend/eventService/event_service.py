@@ -37,7 +37,6 @@ class Event:
         return cls(name, tags, organizer_id, description)
     
 
-
 def create_event(name: str, tags: list, description=""):
     """
     Takes relevant data and initializes an event in the Events table

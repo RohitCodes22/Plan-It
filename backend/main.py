@@ -145,7 +145,7 @@ def get_user_info():
     return jsonify(user.user_info_to_json_struct()), SUCCESS
 
 @app.route("/get_user_info/<user_id>", methods=["GET"])
-def get_user_public_info(user_id: int):
+def get_user_public_info(user_id: str):
     user = userService.User("id", int(user_id))
     return jsonify(user.user_info_to_json_struct()), SUCCESS
 
@@ -212,6 +212,19 @@ def event_feed_endpoint():
 
     events = eventService.generate_event_feed((lat, long), filters, max_distance, num_events)
     return jsonify(events), SUCCESS
+
+'''
+----------------------
+API Comments Endpoints
+----------------------
+'''
+
+@app.route("/get_comments/<event_id>", methods=["GET"])
+def get_comments(event_id: str):
+    comments = databaseService.get_comments(int(event_id))
+    print("\n\n\n\n\n\n", flush=True)
+    print((comments), flush=True)
+    return comments, SUCCESS
 
 '''
 ----------------------

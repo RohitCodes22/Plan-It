@@ -339,6 +339,37 @@ def add_comment(event_id, user_id, contents):
         contents=contents
     )
 
+def get_comments(event_id: int):
+    DB = get_connection()
+    if DB is None:
+        return []
+
+    cursor = DB.cursor(dictionary=True)
+
+    query = f"""
+    SELECT 
+        id,
+        event_id,
+        user_id,
+        contents,
+        created_at,
+        been_updated
+    FROM comments
+    WHERE event_id = {event_id};
+        
+    """    
+    try:
+        cursor.execute(query)
+        comments = cursor.fetchall()
+        cursor.close()
+        DB.close()
+        return comments
+    except Error as err:
+        print("Error retrieving comments for event:", err)
+        cursor.close()
+        DB.close()
+        return []
+
 # ============================================================
 #   PASSWORD HASHING (SECURE)
 # ============================================================
