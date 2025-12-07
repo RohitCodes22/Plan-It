@@ -86,11 +86,19 @@ def generate_event_feed(user_locaton: tuple, filters: set, max_distance: float, 
     
     if num_events > 0:
         events = events[:num_events]
+        
+    if len(events) > 0:
+        organizer_ids = list({e["organizer_id"] for e in events})
+        organizers = databaseService.get_names_from_ids(organizer_ids)
+        organizer_map = {o["id"]: o for o in organizers}
+
+        for e in events:
+            o = organizer_map.get(e["organizer_id"])
+            if o:
+                e["organizer_first"] = o["fname"]
+                e["organizer_last"] = o["lname"]
     
     return events
-
-    # Write a MongoDB query to do this searching efficiently. I think MongoDB 
-    # has built-in support for filtering based on distance, so should be easy
 
 
 def get_events_within_distance(lat: float, long: float, distance: float):

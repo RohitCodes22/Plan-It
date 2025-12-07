@@ -1,7 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const EventFeed = () => {
+  const router = useRouter();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [location, setLocation] = useState(null);
@@ -48,6 +50,7 @@ const EventFeed = () => {
       });
 
       const data = await response.json();
+      console.log(data);
       setEvents(data);
     } catch (err) {
       console.error("Error:", err);
@@ -55,6 +58,10 @@ const EventFeed = () => {
       setLoading(false);
     }
   };
+
+  const handleClickEvent = (id) => {
+    router.push(`/event_page/${id}`)
+  }
 
   // Step 1: Get location
   useEffect(() => {
@@ -70,21 +77,26 @@ const EventFeed = () => {
 
   return (
     <div className="w-full py-4">
-      <h2 className="text-xl font-semibold mb-4">Nearby Events</h2>
-
       {loading && <p className="text-gray-500">Loading events...</p>}
 
       {!loading && events.length === 0 && (
-        <p className="text-gray-500">No events found.</p>
+        <p className="text-gray-500">
+          No events found. Maybe quit being a bum and make your own event.
+        </p>
       )}
 
       {!loading && events.length > 0 && (
-        <div className="flex space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+        <div className="flex flex-col items-center justify-center w-full gap-15">
           {events.map((event) => (
             <div
               key={event.id}
-              className="min-w-[250px] bg-white shadow-md rounded-lg p-4 flex-shrink-0"
+              className="min-w-[250px] bg-white border border-gray-400 shadow-md rounded-lg p-4 flex flex-col justify-center items-center w-[80%]"
             >
+              <div className="w-full flex justify-start">
+                <h5 className="font-semibold mb-2 underline">
+                  {event.organizer_first} {event.organizer_last}
+                </h5>
+              </div>
               <h3 className="text-lg font-bold mb-2">{event.name}</h3>
               <p className="text-gray-600 mb-2">{event.description}</p>
 
@@ -102,6 +114,7 @@ const EventFeed = () => {
                   </span>
                 ))}
               </div>
+              <button onClick={() => handleClickEvent(event.id)} className="rounded-lg ">Check It Out!</button>
             </div>
           ))}
         </div>

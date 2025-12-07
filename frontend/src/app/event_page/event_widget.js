@@ -8,9 +8,6 @@ import CommentInput from "./comment_input";
 export default function EventWidget() {
   const router = useRouter();
 
-  console.log('my url', API_URL)
-
-
   return (
     <div className="w-full flex flex-col gap-6">
       
