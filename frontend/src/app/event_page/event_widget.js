@@ -1,5 +1,4 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { API_URL } from "../api";
 import  TagWidget from "./tag_widget";
 import CommentWidget from "./comment";
@@ -7,7 +6,6 @@ import CommentInput from "./comment_input";
 import { useEffect, useState } from "react";
 
 export default function EventWidget(args) {
-    const router = useRouter();
     const [organizerData, setOrganizerData] = useState(null);
     const [commentData, setCommentData] = useState(null);
     

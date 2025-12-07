@@ -51,7 +51,7 @@ def write_to_db(table, **kwargs):
         DB.close()
         return inserted_id
     except Error as err:
-        print("Error writing to database:", err)
+        print("Error writing to database:", err, flush=True)
         cursor.close()
         DB.close()
         return None
@@ -331,12 +331,14 @@ def get_user_events(user_id):
 # ============================================================
 #   COMMENT OPERATIONS
 # ============================================================
-def add_comment(event_id, user_id, contents):
+def add_comment(event_id: int, user_id: int, contents: str):
     return write_to_db(
         "comments",
         event_id=event_id,
         user_id=user_id,
-        contents=contents
+        contents=contents,
+        created_at="2023-12-7 14:30:00",
+        been_updated="0"
     )
 
 def get_comments(event_id: int):

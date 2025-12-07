@@ -27,19 +27,28 @@ export default function CommentInput(args) {
         if (!buttonEl || isInputEmpty())
             return;
 
+        const commentData = {
+            user_id: 1,
+            event_id: 1,
+            contents: comment            
+        };
         
         // call the callback function to instantly update UI
-        args.callback({
-            username: "MyUsername",
-            contents: comment
+        args.callback(commentData);
+
+        // make the backend do its thing
+        const response = await fetch(`${API_URL}/post_comment`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(commentData)
         });
 
-        // const response = await fetch(`${API_URL}/post_comment`, {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     }
-        // });
+        if (!response.ok) {
+            console.log("HTTP error!");
+        }
+        console.log("comment made!")
 
     }
 
