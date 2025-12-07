@@ -11,7 +11,8 @@ import L from "leaflet";
 // Custom Marker Icon
 // ---------------------------------------------
 const eventIcon = new L.Icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  iconUrl:
+    "https://scontent-den2-1.xx.fbcdn.net/v/t39.30808-6/497737426_2801846933335814_7260856563532135789_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=bIg3h62SVCAQ7kNvwGS6_-b&_nc_oc=AdncFdwO_AfWsl5XsrLRjYxCl-nAT5b4rnTEORNVeOTrWcpWn3axpIRJ0XV1Nze5T9g&_nc_zt=23&_nc_ht=scontent-den2-1.xx&_nc_gid=XDVYI-CmRphT117fqQsBOw&oh=00_AfktkooRSeZaSNdwZrtVFhdSnZQ-xGAj97JcSX0KhKZwXg&oe=693BED65",
   iconSize: [30, 48],
   iconAnchor: [15, 48],
   popupAnchor: [0, -45],
@@ -92,13 +93,11 @@ export default function MyMap() {
   }, [location]);
 
   return (
-    <div className="flex w-full h-[600px]">
+    <div className="flex flex-col-reverse w-full h-[100vh]">
       {/* ------------------------------------------------------------------- */}
       {/* LEFT SIDEBAR */}
       {/* ------------------------------------------------------------------- */}
-      <div className="w-80 bg-gray-100 border-r overflow-y-auto p-4">
-        <h2 className="text-xl font-bold mb-4">Nearby Events</h2>
-
+      <div className="flex gap-2 bg-gray-100 border-r overflow-y-auto p-4">
         {events.length === 0 && (
           <p className="text-gray-500">No events found nearby.</p>
         )}
@@ -140,8 +139,8 @@ export default function MyMap() {
           />
 
           <TileLayer
-            attribution="&copy; OpenStreetMap contributors"
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}.png"
+            attribution="&copy; Stadia Maps, &copy; OpenMapTiles, &copy; OpenStreetMap contributors"
           />
 
           {/* User Location Marker */}
