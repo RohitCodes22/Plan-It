@@ -77,7 +77,8 @@ class User:
         events = databaseService.get_user_events(self.id)
         return events        
         
-    
+    def delete_user(self):
+        databaseService.delete_user(self.id)
 
         
 class Moderator(User):

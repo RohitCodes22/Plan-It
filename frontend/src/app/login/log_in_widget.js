@@ -22,10 +22,10 @@ export default function LogInWidget() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // VERY IMPORTANT for Flask session cookies
+        credentials: "include", 
         body: JSON.stringify({
           username: username,
-          password: password, // ignored by backend unless implemented
+          password: password, 
         }),
       });
 
@@ -40,7 +40,7 @@ export default function LogInWidget() {
       router.push('/home')
     } catch (err) {
       console.error("Login error:", err);
-      setMessage("An error occurred.");
+      setMessage("Username or Password is incorrect.");
     }
   };
 
@@ -87,6 +87,9 @@ export default function LogInWidget() {
           Log In
         </button>
       </form>
+      <center>
+        <p className="text-sm text-gray-600">If you do not have an account, <a href="/signup" className="text-blue-600 hover:underline">Sign Up</a></p>
+      </center>
 
       {message && (
         <p className="text-center text-sm text-gray-700 mt-2">{message}</p>
