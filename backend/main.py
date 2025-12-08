@@ -129,6 +129,18 @@ def signup():
         "message": "Signup request received. User creation in progress."
     }, ACCEPTED
 
+@app.route('/delete_account', methods=['DELETE'])
+def delete_account():
+    if not session.get('logged_in') or session.get('user_id') is None:
+        return {'message': 'not logged in'}, AUTH_ERROR
+
+    user = userService.User("id", session["user_id"])
+    if not user:
+        return BAD_REQUEST
+
+    user.delete_user()
+    session.clear()
+    return {'message': 'account deleted'}, SUCCESS
 
 '''
 ----------------------

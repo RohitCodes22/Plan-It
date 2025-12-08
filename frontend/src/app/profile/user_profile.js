@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { API_URL } from "../api";
+import { useRouter } from "next/navigation";
 import { EventView } from "../components/eventView/eventView";
 
 export default function ProfilePage() {
@@ -14,6 +15,38 @@ export default function ProfilePage() {
     username: "na",
     bio: "",
   });
+
+  const [confirmation, setConfirmation] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const router = useRouter();
+
+  // -------------------------
+  // Delete account
+  // -------------------------
+
+  const deleteAccount = async () => {
+    try {
+      const response = await fetch(`${API_URL}/delete_account`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+    
+      if (!response.ok) {
+        console.error("Failed to delete account");
+        return;
+      }
+
+      setConfirmation(false);
+      setSuccess(true);
+
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
+  };
+
 
   // -------------------------
   // Fetch user profile
@@ -52,12 +85,13 @@ export default function ProfilePage() {
         credentials: "include",
       });
 
-      const events = await response.json();
-      setEvents(events);
+      const data = await response.json();
+      setEvents(data.events); // ✅ THIS LINE
     } catch (error) {
       console.error("Error fetching events:", error);
     }
   };
+
 
   useEffect(() => {
     get_user_data();
@@ -67,13 +101,18 @@ export default function ProfilePage() {
   // -------------------------
   // Filter events
   // -------------------------
-  const attendingEvents = events.filter(
-    (event) => event.organizer_username !== dataForProfile.username
-  );
+  const attendingEvents = Array.isArray(events)
+  ? events.filter(
+      (event) => event.organizer_username !== dataForProfile.username
+    )
+  : [];
 
-  const organizingEvents = events.filter(
-    (event) => event.organizer_username === dataForProfile.username
-  );
+  const organizingEvents = Array.isArray(events)
+  ? events.filter(
+      (event) => event.organizer_username === dataForProfile.username
+    )
+  : [];
+
 
   const eventsToShow =
     viewMode === "attending" ? attendingEvents : organizingEvents;
@@ -123,8 +162,46 @@ export default function ProfilePage() {
         >
           Organizing
         </button>
-      </div>
+        <button 
+          onClick={() => setConfirmation(true)}
+          className = "bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+          >
+            Delete Account
+          </button>
 
+          {confirmation &&(
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+              <div className="bg-white p-6 rounded-md shadow-md max-w-sm w-full">
+                <h2 className="text-xl font-bold mb-4">Do you wish to proceed with account deletion?</h2>
+                <p className = "text-gray-600">This action is irreversible.</p>
+                <div className="mt-6 flex justify-end gap-4">
+                  <button
+                    onClick={deleteAccount}
+                    className = "bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+                    >
+                      Delete
+                    </button>
+                  <button
+                    onClick={() => setConfirmation(false)}
+                    className="px-4 py-2 rounded-md border hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+        {success && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-md shadow-md max-w-sm w-full">
+              <h2 className = "text-x1 font-bold mb-4">
+                Account has been successfully deleted. Redirecting to login page
+              </h2>
+            </div>
+          </div>
+        )}
+      </div>
       {/* ------- Event View Section ------- */}
       <main className="w-full">
         <EventView events={eventsToShow} />

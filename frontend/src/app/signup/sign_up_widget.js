@@ -12,6 +12,8 @@ export default function SignUpPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [popup, setPopup] = useState(false);
+
   console.log('my url', API_URL)
 
   const handleSubmit = async (e) => {
@@ -24,7 +26,7 @@ export default function SignUpPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // VERY IMPORTANT for Flask session cookies
+        credentials: "include", 
         body: JSON.stringify({
           fname: firstName,
           lname: lastName,
@@ -42,10 +44,14 @@ export default function SignUpPage() {
       }
 
       setMessage("Sign Up successful!");
-      router.push('/home')
+      setPopup(true);
+      setTimeout(() => {
+        router.push('/login')
+      }, 2000);
+
     } catch (err) {
       console.error("Sign Up error:", err);
-      setMessage("An error occurred.");
+      setMessage("All fields are not filled correctly.");
     }
   };
 
@@ -131,6 +137,19 @@ export default function SignUpPage() {
           Sign Up
         </button>
       </form>
+
+      {popup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-md shadow-md">
+            <h2 className="text-xl font-bold mb-4">Sign Up Successful!</h2>
+            <p className="text-gray-700">Please enter your new credentials to login!</p>
+          </div>
+        </div>
+      )}
+
+      <center>
+        <p className="text-sm text-gray-600">If you already have an account, <a href="/login" className="text-blue-600 hover:underline">Log In</a></p>
+      </center>
 
       {message && (
         <p className="text-center text-sm text-gray-700 mt-2">{message}</p>
