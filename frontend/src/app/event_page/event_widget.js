@@ -49,7 +49,6 @@ export default function EventWidget(args) {
             });
 
             const comments = await response.json();
-            setCommentData(comments);
 
             for (let i = 0; i < comments.length; i++) {
                 const userResponse = await fetch(`${API_URL}/get_user_info/${comments[i].user_id}`, {
@@ -62,6 +61,8 @@ export default function EventWidget(args) {
                 
                 comments[i].username = userJson.username;
             }
+
+            setCommentData(comments);
 
 
         } catch (error) {
@@ -84,9 +85,12 @@ export default function EventWidget(args) {
         );
     }
 
-    function Comments(items) {
+    function Comments() {
+        if (!commentData)
+            return;
+
         return (<>
-            {items.map((item, index) => {
+            {commentData.map((item, index) => {
                 return <CommentWidget
                         username={item.username}
                         text={item.contents}
@@ -130,9 +134,9 @@ export default function EventWidget(args) {
                 <h2 className="text-2xl font-semibold"> Comments </h2>
                 <hr/>
                 <div className="mt-3">
-                    <CommentInput callback={onCommentCreate}/>
+                    <CommentInput callback={onCommentCreate} eventId={args.data.id}/>
                     {
-                        commentData ? Comments(commentData) : "Loading CommentsS"
+                        commentData ? Comments() : "Loading Comments"
                     }
                 </div>
             </div>
