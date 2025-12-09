@@ -5,6 +5,7 @@ Imports
 '''
 from flask import Flask, jsonify, request, send_from_directory, Response, session
 from datetime import date
+from parse_location import parse_mysql_point
 from flask_cors import CORS
 import json
 import os
@@ -191,7 +192,7 @@ def create_event(event_name):
 @app.route("/get_event/<event_id>", methods=["GET"])
 def get_event(event_id: int):
     e = eventService.Event.read_event(event_id)
-    print(f"event: {e}", flush=True)
+    e["location"] = parse_mysql_point(e["location"])
     if e == None:
         return jsonify(e), NO_CONTENT 
     return jsonify(e), SUCCESS
