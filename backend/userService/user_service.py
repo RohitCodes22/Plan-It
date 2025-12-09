@@ -69,6 +69,7 @@ class User:
             "fname": self.fname,
             "lname": self.lname,
             "email": self.email,
+            "id": self.id
         }
         
         return info
