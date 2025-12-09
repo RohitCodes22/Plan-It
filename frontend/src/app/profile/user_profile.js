@@ -86,7 +86,7 @@ export default function ProfilePage() {
       });
 
       const data = await response.json();
-      setEvents(data.events); // ✅ THIS LINE
+      setEvents(data); 
     } catch (error) {
       console.error("Error fetching events:", error);
     }
