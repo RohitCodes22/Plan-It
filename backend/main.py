@@ -183,6 +183,14 @@ API Event Endpoints (Kafka)
 def encode_event(event: dict) -> bytes:
     return json.dumps(event).encode("utf-8")
 
+@app.route("/attend_event/<event_id>", methods=["POST"])
+def attend_event(event_id: str):
+    if not session.get('logged_in') or session.get('user_id') is None:
+        return {'message': 'not logged in'}, AUTH_ERROR
+    
+    databaseService.add_attendee(event_id, session.get("user_id"))
+    return "Attending event", SUCCESS
+
 @app.route("/create_event/<event_name>", methods=["GET"]) # making GET just for testing in browser
 def create_event(event_name):
     kafka_producer.produce("create_event", encode_event({"name": event_name}))
