@@ -32,8 +32,9 @@ export default function CommentInput(args) {
         const userResponse = await fetch(`${API_URL}/get_user_info`, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json"
             },
+            credentials: "include"
         });
 
         // handle case where user is not logged in
@@ -42,12 +43,14 @@ export default function CommentInput(args) {
             return;
         }
 
+        let jsonRes = await userResponse.json();
+
         const commentData = {
+            username: jsonRes.username,
             user_id: jsonRes.id,
             event_id: args.eventId,
             contents: comment            
         };
-        
         // call the callback function to instantly update UI
         args.callback(commentData);
 
