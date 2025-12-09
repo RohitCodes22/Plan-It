@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 export default function EventWidget(args) {
     const [organizerData, setOrganizerData] = useState(null);
     const [commentData, setCommentData] = useState(null);
+    const [isAttending, setIsAttending] = useState(false);
     
     const onCommentCreate = (commentData) => {
         setCommentData(curValue => {
@@ -17,6 +18,24 @@ export default function EventWidget(args) {
             }];
             
         });
+    }
+
+    const onAttend = async () => {
+        if (isAttending) {
+            return;
+        }
+        const post = await fetch(`${API_URL}/attend_event/${args.data.id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include"            
+        });
+
+        if (post.status == 401) {
+            alert("Sign in before attending events!");
+        }
+
     }
 
     const getUserData = async () => {
@@ -128,6 +147,9 @@ export default function EventWidget(args) {
                 <div className="ml-2">
                     <p>{args.data.description},</p>
                 </div>
+                <button onClick={onAttend} className="rounded border p-2 bg-blue-500 text-white">
+                    Attend!
+                </button>
             </div>
 
             <div>
