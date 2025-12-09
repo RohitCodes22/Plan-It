@@ -27,8 +27,23 @@ export default function CommentInput(args) {
         if (!buttonEl || isInputEmpty())
             return;
 
+
+        // get current user ID
+        const userResponse = await fetch(`${API_URL}/get_user_info`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        // handle case where user is not logged in
+        if (userResponse.status == 401) {
+            alert("You must be logged in to post comments!");
+            return;
+        }
+
         const commentData = {
-            user_id: 1,
+            user_id: jsonRes.id,
             event_id: args.eventId,
             contents: comment            
         };
@@ -37,7 +52,7 @@ export default function CommentInput(args) {
         args.callback(commentData);
 
         // make the backend do its thing
-        const response = await fetch(`${API_URL}/post_comment`, {
+        const post = await fetch(`${API_URL}/post_comment`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -45,7 +60,7 @@ export default function CommentInput(args) {
             body: JSON.stringify(commentData)
         });
 
-        if (!response.ok) {
+        if (!post.ok) {
             console.log("HTTP error!");
         }
         console.log("comment made!")
