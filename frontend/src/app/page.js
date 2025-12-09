@@ -13,7 +13,7 @@ export default function Home() {
         </p>
 
         <a
-          href="/sign-up"
+          href="/signup"
           className="px-6 py-3 rounded-xl border border-black hover:bg-gray-100 transition text-base"
         >
           Get Started

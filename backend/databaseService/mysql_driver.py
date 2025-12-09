@@ -139,6 +139,45 @@ def get_names_from_ids(ids: list[int]):
     DB.close()
     return users
 
+def delete_user(user_id):
+    DB = get_connection()
+    if DB is None:
+        return False
+
+    cursor = DB.cursor()
+    try:
+        cursor.execute("""
+            DELETE FROM comments
+            WHERE event_id IN (
+                SELECT id FROM events WHERE organizer_id = %s
+            )
+        """, (user_id,))
+        cursor.execute(
+            "DELETE FROM events WHERE organizer_id = %s",
+            (user_id,)
+        )
+        cursor.execute(
+            "DELETE FROM comments WHERE user_id = %s",
+            (user_id,)
+        )
+        cursor.execute(
+            "DELETE FROM users WHERE id = %s",
+            (user_id,)
+        )
+
+        DB.commit()
+        return True
+
+    except Error as err:
+        DB.rollback()
+        print("Error deleting user:", err)
+        return False
+
+    finally:
+        cursor.close()
+        DB.close()
+
+
 # ============================================================
 #   EVENT OPERATIONS
 # ============================================================

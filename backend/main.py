@@ -129,6 +129,18 @@ def signup():
         "message": "Signup request received. User creation in progress."
     }, ACCEPTED
 
+@app.route('/delete_account', methods=['DELETE'])
+def delete_account():
+    if not session.get('logged_in') or session.get('user_id') is None:
+        return {'message': 'not logged in'}, AUTH_ERROR
+
+    user = userService.User("id", session["user_id"])
+    if not user:
+        return BAD_REQUEST
+
+    user.delete_user()
+    session.clear()
+    return {'message': 'account deleted'}, SUCCESS
 
 '''
 ----------------------
@@ -203,11 +215,13 @@ def event_feed_endpoint():
 
     try:
         lat = data["latitude"]
+        print(data, flush=True)
         long = data["longitude"]
         filters = set(data.get("filters", []))
         max_distance = data["max_distance"]
         num_events = data.get("num_events", -1)
     except KeyError as e:
+        print(e, flush=True)
         return jsonify({"error": f"Missing required field: {str(e)}"}), BAD_REQUEST
 
     events = eventService.generate_event_feed((lat, long), filters, max_distance, num_events)
