@@ -14,7 +14,7 @@ const BottomNavBar = () => {
         <a href="/TODO">
           <FaSearch />
         </a>
-        <a href="/TODO">
+        <a href="/calendar">
           <MdEventAvailable />
         </a>
         <a href="/map">
