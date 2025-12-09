@@ -29,7 +29,7 @@ export default function CommentInput(args) {
 
         const commentData = {
             user_id: 1,
-            event_id: 1,
+            event_id: args.eventId,
             contents: comment            
         };
         
