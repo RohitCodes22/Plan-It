@@ -25,7 +25,7 @@ export default function Calendar() {
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="w-screen h-screen bg-white text-black flex flex-col items-center justify-start p-8">
+    <div className="w-screen h-screen bg-white text-black flex flex-col items-center justify-start pt-24">
       <h1 className="text-4xl font-bold mb-4">Calendar</h1>
       <div className="text-xl mb-8">
         Today's Date: <span className="font-semibold">{currentDate}</span>
