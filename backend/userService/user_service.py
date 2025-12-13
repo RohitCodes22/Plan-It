@@ -22,6 +22,30 @@ class User:
             return None
         
         self.populate_user_from_row(user)
+        
+    def update_profile(self, update_data: dict) -> bool:
+        """
+        Updates editable profile fields only.
+        """
+        ALLOWED_FIELDS = {"fname", "lname", "bio"}
+
+        safe_updates = {
+            k: v for k, v in update_data.items()
+            if k in ALLOWED_FIELDS
+        }
+
+        if not safe_updates:
+            return False
+
+        success = databaseService.update_user_fields(self.id, safe_updates)
+
+        if success:
+            # keep object in sync
+            for k, v in safe_updates.items():
+                setattr(self, k, v)
+
+        return success
+
 
     @classmethod
     def create_user(cls, username, fname, lname, email, password):
@@ -60,19 +84,21 @@ class User:
         self.fname = user.get("fname")
         self.lname = user.get("lname")
         self.email = user.get("email")
+        self.bio = user.get("bio")
         self.id = user.get("id")
         self.encoded_password = user.get("password")
+
         
     def user_info_to_json_struct(self):
-        info = {
+        return {
             "username": self.username,
             "fname": self.fname,
             "lname": self.lname,
             "email": self.email,
+            "bio": self.bio,
             "id": self.id
         }
-        
-        return info
+
     
     def get_user_events(self):
         events = databaseService.get_user_events(self.id)

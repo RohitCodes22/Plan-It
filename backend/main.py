@@ -222,6 +222,32 @@ def get_profile_picture_username(user_id):
         UPLOADS_DIR,
         "unknown_rohit.jpg"
     )
+    
+    
+@app.route("/user/update", methods=["PATCH"])
+def update_user_profile():
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), AUTH_ERROR
+
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data provided"}), BAD_REQUEST
+
+    try:
+        user = userService.User("id", session["user_id"])
+    except Exception:
+        return jsonify({"error": "User not found"}), NOT_FOUND
+
+    success = user.update_profile(data)
+
+    if not success:
+        return jsonify({"error": "No valid fields to update"}), BAD_REQUEST
+
+    return jsonify({
+        "message": "Profile updated",
+        "user": user.user_info_to_json_struct()
+    }), SUCCESS
+
 
 """
 ----------------------
