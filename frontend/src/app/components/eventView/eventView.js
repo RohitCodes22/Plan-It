@@ -1,8 +1,14 @@
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
+import EventCreator from "../eventCreator/eventCreator";
 
 export const EventView = ({ events }) => {
   const [sortBy, setSortBy] = useState("name");
+
+
+    const addEvent = () => {
+
+    }
 
   // Always call hooks FIRST
   const sortedEvents = useMemo(() => {
@@ -43,6 +49,8 @@ export const EventView = ({ events }) => {
 
       {/* Event List */}
       <div className="flex flex-col gap-3">
+        <EventCreator/>
+
         {sortedEvents.map((event) => (
           <Link
             key={event.event_id}
