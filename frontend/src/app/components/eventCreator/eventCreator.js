@@ -1,6 +1,7 @@
 import { API_URL } from "@/app/api";
 import React, { useState } from "react";
 import LocationSelector from "./locationSelector";
+import PhotoUpload from "./photoUpload";
 
 export default function EventCreator() {
   const [showModal, setShowModal] = useState(false);
@@ -129,6 +130,13 @@ export default function EventCreator() {
                   onChange={handleChange}
                   className="w-full border rounded-md px-3 py-2 h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Upload a photo
+                </label>
+                <PhotoUpload/>
               </div>
 
               <div className="flex justify-end space-x-3 pt-2">
