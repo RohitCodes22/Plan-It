@@ -6,21 +6,32 @@ import { GoPersonFill } from "react-icons/go";
 
 const BottomNavBar = () => {
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-white shadow-md border-t-2 border-gray-200 flex justify-center">
-      <nav className="flex items-center justify-center p-4 text-2xl gap-x-20">
-        <a href="/home">
+    <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-md z-50">
+      <nav
+        className="
+          mx-auto
+          flex
+          h-16
+          max-w-md
+          items-center
+          justify-around
+          text-xl
+          sm:text-2xl
+        "
+      >
+        <a href="/home" className="p-2">
           <FaHome />
         </a>
-        <a href="/TODO">
+        <a href="/search" className="p-2">
           <FaSearch />
         </a>
-        <a href="/calendar">
+        <a href="/calendar" className="p-2">
           <MdEventAvailable />
         </a>
-        <a href="/map">
+        <a href="/map" className="p-2">
           <FaMapLocationDot />
         </a>
-        <a href="/profile">
+        <a href="/profile" className="p-2">
           <GoPersonFill />
         </a>
       </nav>
