@@ -6,7 +6,7 @@ const Page = () => {
   return (
     <div>
       <Header />
-      <main className="flex-1 mb-15">
+      <main className="flex-1 mb-15 pt-20 pb-20">
         <EventFeed />
       </main>
       <BottomNavBar />
