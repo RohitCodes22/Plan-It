@@ -13,8 +13,10 @@ CREATE TABLE users (
     fname VARCHAR(255),
     lname VARCHAR(255),
     email VARCHAR(255) NOT NULL UNIQUE,
+    bio TEXT,
     role VARCHAR(50) NOT NULL DEFAULT 'user'
 );
+
 
 -- Events table with spatial index
 CREATE TABLE events (
@@ -54,28 +56,55 @@ CREATE TABLE event_attendees (
 -- ============================================================
 --   FAKE USERS (ORIGINAL + NEW)
 -- ============================================================
-INSERT INTO users (username, password, fname, lname, email, role)
+INSERT INTO users (username, password, fname, lname, email, bio, role)
 VALUES 
-('spiderhit', 'pass', 'Rohit', 'Shafe', 'rohit@hotmail.com', 'user'),
-('dd', 'pass', 'Donald', 'Duck', 'Donald@duck.com', 'user'),
-('doublem', 'pass', 'Mickey', 'Mouse', 'Mickey@mouse.com', 'user'),
-('owca', 'pass', 'Major', 'Monogram', 'mm@owca.com', 'user'),
+('spiderhit', 'pass', 'Rohit', 'Shafe', 'rohit@hotmail.com',
+ 'Loves organizing events and pretending they will be chill.', 'user'),
 
--- New requested users
-('colins', 'youWillNeverGuess', 'Colin', 'Smith', 'colin@example.com', 'user'),
-('seanwalsh', 'pass', 'Sean', 'Walsh', 'sean@example.com', 'user'),
+('dd', 'pass', 'Donald', 'Duck', 'Donald@duck.com',
+ 'Quacks loudly, attends events louder.', 'user'),
 
--- Fun characters
-('jwick', 'pass', 'John', 'Wick', 'john@continental.com', 'user'),
-('frodo', 'pass', 'Frodo', 'Baggins', 'frodo@shire.me', 'user'),
-('shrek', 'pass', 'Shrek', 'Ogre', 'shrek@swamp.com', 'user'),
-('harryp', 'pass', 'Harry', 'Potter', 'harry@hogwarts.edu', 'user'),
-('buzzl', 'pass', 'Buzz', 'Lightyear', 'buzz@starcommand.org', 'user'),
-('barbie', 'pass', 'Barbie', '', 'barbie@malibu.com', 'user'),
-('toretto', 'pass', 'Dominic', 'Toretto', 'dom@family.com', 'user'),
-('scooby', 'pass', 'Scooby', 'Doo', 'scooby@snacks.net', 'user'),
-('yoda', 'pass', 'Master', 'Yoda', 'yoda@jedi.gov', 'user'),
-('ironman', 'pass', 'Tony', 'Stark', 'tony@starkindustries.com', 'user');
+('doublem', 'pass', 'Mickey', 'Mouse', 'Mickey@mouse.com',
+ 'Cheese enthusiast. Will host anything if snacks are involved.', 'user'),
+
+('owca', 'pass', 'Major', 'Monogram', 'mm@owca.com',
+ 'Runs a tight ship. Dislikes chaos. Often surrounded by chaos.', 'user'),
+
+('colins', 'youWillNeverGuess', 'Colin', 'Smith', 'colin@example.com',
+ 'Computer science student. Probably debugging something right now.', 'user'),
+
+('seanwalsh', 'pass', 'Sean', 'Walsh', 'sean@example.com',
+ 'Always down for a boys night or a study session.', 'user'),
+
+('jwick', 'pass', 'John', 'Wick', 'john@continental.com',
+ 'Professional problem solver. Strict rules apply.', 'user'),
+
+('frodo', 'pass', 'Frodo', 'Baggins', 'frodo@shire.me',
+ 'Just a simple hobbit who somehow got invited to everything.', 'user'),
+
+('shrek', 'pass', 'Shrek', 'Ogre', 'shrek@swamp.com',
+ 'Swamp owner. BBQ specialist. Donkey tolerated.', 'user'),
+
+('harryp', 'pass', 'Harry', 'Potter', 'harry@hogwarts.edu',
+ 'Wizard in training. Prone to dramatic events.', 'user'),
+
+('buzzl', 'pass', 'Buzz', 'Lightyear', 'buzz@starcommand.org',
+ 'Space ranger. Buzzwords guaranteed.', 'user'),
+
+('barbie', 'pass', 'Barbie', '', 'barbie@malibu.com',
+ 'Fashion-forward. Party-ready. Always iconic.', 'user'),
+
+('toretto', 'pass', 'Dominic', 'Toretto', 'dom@family.com',
+ 'Lives by three rules: cars, food, and family.', 'user'),
+
+('scooby', 'pass', 'Scooby', 'Doo', 'scooby@snacks.net',
+ 'Snack-focused investigator. Easily distracted.', 'user'),
+
+('yoda', 'pass', 'Master', 'Yoda', 'yoda@jedi.gov',
+ 'Speaks in riddles. Surprisingly calming presence.', 'user'),
+
+('ironman', 'pass', 'Tony', 'Stark', 'tony@starkindustries.com',
+ 'Tech genius. Mild explosion risk.', 'user');
 
 
 -- ============================================================

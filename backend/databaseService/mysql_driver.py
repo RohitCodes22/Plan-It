@@ -215,6 +215,42 @@ def delete_user(user_id):
         cursor.close()
         DB.close()
 
+def update_user_fields(user_id: int, fields: dict) -> bool:
+    """
+    Updates allowed user fields.
+    fields = {"fname": ..., "lname": ..., "bio": ...}
+    """
+    if not fields:
+        return False
+
+    DB = get_connection()
+    if DB is None:
+        return False
+
+    cursor = DB.cursor()
+
+    columns = ", ".join([f"{k} = %s" for k in fields.keys()])
+    values = list(fields.values())
+    values.append(user_id)
+
+    query = f"""
+        UPDATE users
+        SET {columns}
+        WHERE id = %s
+    """
+
+    try:
+        cursor.execute(query, tuple(values))
+        DB.commit()
+        return True
+    except Error as err:
+        DB.rollback()
+        print("Error updating user:", err)
+        return False
+    finally:
+        cursor.close()
+        DB.close()
+
 
 # ============================================================
 #   EVENT OPERATIONS
