@@ -85,7 +85,7 @@ export default function ProfilePage() {
       });
 
       const data = await response.json();
-      setEvents(data); 
+      setEvents(data);
     } catch (error) {
       console.error("Error fetching events:", error);
     }
@@ -121,19 +121,23 @@ export default function ProfilePage() {
     <div className="w-full flex flex-col gap-8 p-6">
       {/* ------- Profile Header ------- */}
       <header className="flex flex-col gap-2 border-b pb-4">
-        <div className="relative w-24 h-24 flex-shrink-0">
-          <Image
-            src={`${API_URL}/profile/picture`}
-            alt="Profile picture"
-            fill
-            sizes="96px"
-            className="rounded-full object-cover border shadow-sm"
-            unoptimized
-          />
+        <div className="flex items-center gap-4">
+          <div className="relative w-24 h-24 flex-shrink-0">
+            <Image
+              src={`${API_URL}/profile/picture/`}
+              alt="Profile picture"
+              fill
+              sizes="96px"
+              className="rounded-full object-cover border shadow-sm"
+              unoptimized
+            />
+          </div>
+
+          <h1 className="text-3xl font-bold">
+            {dataForProfile.fname} {dataForProfile.lname}
+          </h1>
         </div>
-        <h1 className="text-3xl font-bold">
-          {dataForProfile.fname} {dataForProfile.lname}
-        </h1>
+
         <div className="flex flex-col">
           <span className="text-gray-700 font-medium">
             @{dataForProfile.username}

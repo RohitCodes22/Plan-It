@@ -197,6 +197,31 @@ def get_profile_picture():
         UPLOADS_DIR,
         "unknown_rohit.jpg"
     )
+    
+@app.route("/profile/picture/<user_id>", methods=["GET"])
+def get_profile_picture_username(user_id):
+    
+    if not session.get('logged_in') or session.get('user_id') is None:
+            return {'message': 'not logged in'}, AUTH_ERROR
+        
+    if not user_id:
+        return {'message': 'not logged in'}, AUTH_ERROR
+
+    username = userService.User("id", int(user_id)).username
+
+    # Try supported extensions
+    for ext in ("jpg", "jpeg", "png"):
+        filename = f"{username}.{ext}"
+        filepath = os.path.join(UPLOADS_DIR, filename)
+
+        if os.path.exists(filepath):
+            return send_from_directory(UPLOADS_DIR, filename)
+
+    # Fallback
+    return send_from_directory(
+        UPLOADS_DIR,
+        "unknown_rohit.jpg"
+    )
 
 """
 ----------------------
