@@ -34,9 +34,9 @@ export default function EventPage({params}) {
     }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-white font-sans">
+    <div className="min-h-screen flex flex-col items-center bg-white font-sans pb-20">
       <Header />
-      <main className="w-full max-w-md mt-12 rounded-2xl shadow-lg p-10 border">
+      <main className="w-full max-w-md rounded-2xl shadow-lg p-10 border">
         {
             eventData ? <EventWidget data={eventData}/> : <h1> Loading ...</h1>
         }

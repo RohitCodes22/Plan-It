@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { API_URL } from "../api";
 import { useRouter } from "next/navigation";
 import { EventView } from "../components/eventView/eventView";
-
+import Image from "next/image";
 export default function ProfilePage() {
   const [viewMode, setViewMode] = useState("attending"); // "attending" | "organizing"
   const [events, setEvents] = useState([]);
@@ -30,7 +30,7 @@ export default function ProfilePage() {
         method: "DELETE",
         credentials: "include",
       });
-    
+
       if (!response.ok) {
         console.error("Failed to delete account");
         return;
@@ -40,13 +40,12 @@ export default function ProfilePage() {
       setSuccess(true);
 
       setTimeout(() => {
-        router.push('/login');
+        router.push("/login");
       }, 2000);
     } catch (error) {
       console.error("Error deleting account:", error);
     }
   };
-
 
   // -------------------------
   // Fetch user profile
@@ -92,7 +91,6 @@ export default function ProfilePage() {
     }
   };
 
-
   useEffect(() => {
     get_user_data();
     get_events();
@@ -102,17 +100,16 @@ export default function ProfilePage() {
   // Filter events
   // -------------------------
   const attendingEvents = Array.isArray(events)
-  ? events.filter(
-      (event) => event.organizer_username !== dataForProfile.username
-    )
-  : [];
+    ? events.filter(
+        (event) => event.organizer_username !== dataForProfile.username
+      )
+    : [];
 
   const organizingEvents = Array.isArray(events)
-  ? events.filter(
-      (event) => event.organizer_username === dataForProfile.username
-    )
-  : [];
-
+    ? events.filter(
+        (event) => event.organizer_username === dataForProfile.username
+      )
+    : [];
 
   const eventsToShow =
     viewMode === "attending" ? attendingEvents : organizingEvents;
@@ -124,10 +121,19 @@ export default function ProfilePage() {
     <div className="w-full flex flex-col gap-8 p-6">
       {/* ------- Profile Header ------- */}
       <header className="flex flex-col gap-2 border-b pb-4">
+        <div className="relative w-24 h-24 flex-shrink-0">
+          <Image
+            src={`${API_URL}/profile/picture`}
+            alt="Profile picture"
+            fill
+            sizes="96px"
+            className="rounded-full object-cover border shadow-sm"
+            unoptimized
+          />
+        </div>
         <h1 className="text-3xl font-bold">
           {dataForProfile.fname} {dataForProfile.lname}
         </h1>
-
         <div className="flex flex-col">
           <span className="text-gray-700 font-medium">
             @{dataForProfile.username}
@@ -162,40 +168,42 @@ export default function ProfilePage() {
         >
           Organizing
         </button>
-        <button 
+        <button
           onClick={() => setConfirmation(true)}
-          className = "bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-          >
-            Delete Account
-          </button>
+          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+        >
+          Delete Account
+        </button>
 
-          {confirmation &&(
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-              <div className="bg-white p-6 rounded-md shadow-md max-w-sm w-full">
-                <h2 className="text-xl font-bold mb-4">Do you wish to proceed with account deletion?</h2>
-                <p className = "text-gray-600">This action is irreversible.</p>
-                <div className="mt-6 flex justify-end gap-4">
-                  <button
-                    onClick={deleteAccount}
-                    className = "bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
-                    >
-                      Delete
-                    </button>
-                  <button
-                    onClick={() => setConfirmation(false)}
-                    className="px-4 py-2 rounded-md border hover:bg-gray-100"
-                  >
-                    Cancel
-                  </button>
-                </div>
+        {confirmation && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-md shadow-md max-w-sm w-full">
+              <h2 className="text-xl font-bold mb-4">
+                Do you wish to proceed with account deletion?
+              </h2>
+              <p className="text-gray-600">This action is irreversible.</p>
+              <div className="mt-6 flex justify-end gap-4">
+                <button
+                  onClick={deleteAccount}
+                  className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => setConfirmation(false)}
+                  className="px-4 py-2 rounded-md border hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
         {success && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-md shadow-md max-w-sm w-full">
-              <h2 className = "text-x1 font-bold mb-4">
+              <h2 className="text-x1 font-bold mb-4">
                 Account has been successfully deleted. Redirecting to login page
               </h2>
             </div>

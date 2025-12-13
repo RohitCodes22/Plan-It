@@ -32,7 +32,7 @@ CORS(app,
      resources={r"/*": {"origins": "*"}}, #! Development Only !#
      supports_credentials=True)
 #CORS(app, origins=["http://localhost:3000"]) # allow outside source (frontend)
-UPLOAD_FOLDER = 'uploads/'  # Ensure this folder exists
+UPLOADS_DIR = os.path.join(os.path.dirname(__file__), "uploads")
 
 
 '''
@@ -174,6 +174,29 @@ def get_user_events():
         return BAD_REQUEST
     
     return jsonify(user.get_user_events()), SUCCESS
+
+@app.route("/profile/picture", methods=["GET"])
+def get_profile_picture():
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return {'message': 'not logged in'}, AUTH_ERROR
+
+    username = userService.User("id", user_id).username
+
+    # Try supported extensions
+    for ext in ("jpg", "jpeg", "png"):
+        filename = f"{username}.{ext}"
+        filepath = os.path.join(UPLOADS_DIR, filename)
+
+        if os.path.exists(filepath):
+            return send_from_directory(UPLOADS_DIR, filename)
+
+    # Fallback
+    return send_from_directory(
+        UPLOADS_DIR,
+        "unknown_rohit.jpg"
+    )
 
 """
 ----------------------
