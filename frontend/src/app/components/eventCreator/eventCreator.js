@@ -11,6 +11,7 @@ export default function EventCreator() {
     date: "",
     description: "",
   });
+  const [photo, setPhoto] = useState(null);
 
   function handleMapSelect(coords) {
     setEventData({ ...eventData, location: {
@@ -18,6 +19,10 @@ export default function EventCreator() {
         longitude: coords.lat,
         srid: 4326
     } })
+  }
+
+  function handlePhotoUpload(file) {
+    setPhoto(file);
   }
 
   const openModal = () => setShowModal(true);
@@ -53,13 +58,26 @@ export default function EventCreator() {
         location: eventData.location
     };
 
-    const post = fetch(`${API_URL}/create_event`, {
+    const post = await fetch(`${API_URL}/create_event`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
         body: JSON.stringify(testData)
+    });
+
+    // upload photo
+    const formData = new FormData();
+    formData.append("photo", photo);
+
+    const photoPost = await fetch(`${API_URL}/events/upload_photo`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: formData        
     });
 
     // add to attendee table
@@ -136,7 +154,7 @@ export default function EventCreator() {
                 <label className="block text-sm font-medium mb-1">
                   Upload a photo
                 </label>
-                <PhotoUpload/>
+                <PhotoUpload onChange={handlePhotoUpload}/>
               </div>
 
               <div className="flex justify-end space-x-3 pt-2">

@@ -335,6 +335,18 @@ def event_feed_endpoint():
     events = eventService.generate_event_feed((lat, long), filters, max_distance, num_events)
     return jsonify(events), SUCCESS
 
+@app.route("/events/upload_photo", methods=["POST"])
+def event_upload_photo():
+    PATH = ""
+    data = request.files("photo")
+
+    try:
+        print(f"data is {data}", flush=True)
+        return jsonify({"value": 1}), SUCCESS
+    except KeyError as e:
+        print(e, flush=True)
+        return jsonify({"error": f"Missing required field: {str(e)}"}), BAD_REQUEST
+
 '''
 ----------------------
 API Comments Endpoints

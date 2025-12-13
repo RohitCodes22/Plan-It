@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function PhotoUpload({ onChange, multiple = false }) {
+export default function PhotoUpload({ onChange }) {
   const [previews, setPreviews] = useState([]);
 
   function handleFileChange(e) {
@@ -14,7 +14,7 @@ export default function PhotoUpload({ onChange, multiple = false }) {
       <input
         type="file"
         accept="image/*"
-        multiple={multiple}
+        multiple={false}
         onChange={handleFileChange}
         className='p-2 rounded border border-grey'
       />
