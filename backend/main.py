@@ -33,7 +33,14 @@ CORS(app,
      supports_credentials=True)
 #CORS(app, origins=["http://localhost:3000"]) # allow outside source (frontend)
 UPLOADS_DIR = os.path.join(os.path.dirname(__file__), "uploads")
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
+# Ensure uploads folder exsits
+os.makedirs(UPLOADS_DIR, exist_ok=True)
+
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 '''
 ----------------------
@@ -175,28 +182,6 @@ def get_user_events():
     
     return jsonify(user.get_user_events()), SUCCESS
 
-@app.route("/profile/picture", methods=["GET"])
-def get_profile_picture():
-    user_id = session.get("user_id")
-
-    if not user_id:
-        return {'message': 'not logged in'}, AUTH_ERROR
-
-    username = userService.User("id", user_id).username
-
-    # Try supported extensions
-    for ext in ("jpg", "jpeg", "png"):
-        filename = f"{username}.{ext}"
-        filepath = os.path.join(UPLOADS_DIR, filename)
-
-        if os.path.exists(filepath):
-            return send_from_directory(UPLOADS_DIR, filename)
-
-    # Fallback
-    return send_from_directory(
-        UPLOADS_DIR,
-        "unknown_rohit.jpg"
-    )
     
 @app.route("/profile/picture/<user_id>", methods=["GET"])
 def get_profile_picture_username(user_id):
@@ -210,7 +195,7 @@ def get_profile_picture_username(user_id):
     username = userService.User("id", int(user_id)).username
 
     # Try supported extensions
-    for ext in ("jpg", "jpeg", "png"):
+    for ext in ("jpg", "jpeg", "png", "webp"):
         filename = f"{username}.{ext}"
         filepath = os.path.join(UPLOADS_DIR, filename)
 
@@ -247,6 +232,43 @@ def update_user_profile():
         "message": "Profile updated",
         "user": user.user_info_to_json_struct()
     }), SUCCESS
+
+@app.route("/user/update_profile_image", methods=["POST"])
+def update_profile_image():
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), AUTH_ERROR
+
+    if "image" not in request.files:
+        return jsonify({"error": "No image provided"}), BAD_REQUEST
+
+    file = request.files["image"]
+
+    if file.filename == "":
+        return jsonify({"error": "Empty filename"}), BAD_REQUEST
+
+    if not allowed_file(file.filename):
+        return jsonify({"error": "Invalid file type"}), BAD_REQUEST
+
+    # Get user
+    user = userService.User("id", session["user_id"])
+    username = user.username
+    
+    ext = file.filename.rsplit(".", 1)[1].lower()
+    filename = f"{username}.{ext}"
+    filepath = os.path.join(UPLOADS_DIR, filename)
+
+    # Delete existing image with same username
+    for f in os.listdir(UPLOADS_DIR):
+        if f.startswith(username + "."):
+            os.remove(os.path.join(UPLOADS_DIR, f))
+
+    # Save new image
+    file.save(filepath)
+
+    return jsonify({
+        "message": "Profile image updated",
+        "image_url": f"/profile/picture/{user.id}"
+    }), 200
 
 
 """
