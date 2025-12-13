@@ -79,8 +79,9 @@ function TagList(items) {
 
   function Comments() {
     if (!commentData.length) return <p className="text-gray-500">No comments yet.</p>;
+    console.log(commentData);
     return commentData.map((item, index) => (
-      <CommentWidget username={item.username} text={item.contents} key={index} />
+      <CommentWidget username={item.username} text={item.contents} key={index} id={item.user_id}/>
     ));
   }
 
