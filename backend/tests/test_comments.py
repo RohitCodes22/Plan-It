@@ -1,5 +1,5 @@
 def test_post_comment_success(client, mocker):
-    mocker.patch("backend.main.databaseService.add_comment")
+    mocker.patch("main.databaseService.add_comment")
 
     res = client.post("/post_comment", json={
         "user_id": 1,
@@ -19,7 +19,7 @@ def test_post_comment_missing_fields(client):
 
 
 def test_get_comments(client, mocker):
-    mocker.patch("backend.main.databaseService.get_comments", return_value=[])
+    mocker.patch("main.databaseService.get_comments", return_value=[])
 
     res = client.get("/get_comments/1")
 

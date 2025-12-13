@@ -7,7 +7,7 @@ def login_session(client):
 def test_create_event(client, mocker):
     login_session(client)
 
-    mocker.patch("backend.main.databaseService.create_event")
+    mocker.patch("main.databaseService.create_event")
 
     res = client.post("/create_event", json={
         "name": "Test Event",
@@ -27,7 +27,7 @@ def test_create_event(client, mocker):
 def test_attend_event(client, mocker):
     login_session(client)
 
-    mocker.patch("backend.main.databaseService.add_attendee")
+    mocker.patch("main.databaseService.add_attendee")
 
     res = client.post("/attend_event/1")
 
@@ -35,7 +35,7 @@ def test_attend_event(client, mocker):
 
 
 def test_get_all_events(client, mocker):
-    mocker.patch("backend.main.eventService.get_all_events", return_value=[])
+    mocker.patch("main.eventService.get_all_events", return_value=[])
 
     res = client.get("/get_event/all")
 
@@ -45,7 +45,7 @@ def test_get_all_events(client, mocker):
 
 def test_event_feed(client, mocker):
     mocker.patch(
-        "backend.main.eventService.generate_event_feed",
+        "main.eventService.generate_event_feed",
         return_value=[]
     )
 
