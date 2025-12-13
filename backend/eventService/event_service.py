@@ -111,7 +111,10 @@ def get_events_within_distance(lat: float, long: float, distance: float):
     
     events = databaseService.get_events_in_range(lat, long, distance)
     return events
-    
+
+def get_all_events():
+    events = databaseService.retrieve_table("events")
+    return events
 
 
 # for testing the file's functionality

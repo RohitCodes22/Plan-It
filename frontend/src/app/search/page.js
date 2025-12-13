@@ -9,6 +9,8 @@ import { API_URL } from "../api";
 export default function SearchPage() {
   const [events, setEvents] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -17,10 +19,27 @@ export default function SearchPage() {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         const data = await response.json();
-        setEvents(data);
+
+        const safeData = data.map((event) => ({
+          id: event.id,
+          name: event.name || "Untitled Event",
+          tags: event.tags || [],
+          ...event,
+        }));
+
+        setEvents(safeData);
       } catch (err) {
         console.error("Error fetching events:", err);
+        setError("Failed to load events. Showing sample data.");
+
+        setEvents([
+          { id: 1, name: "Sample Event 1", tags: ["sample", "test"] },
+          { id: 2, name: "Sample Event 2", tags: ["mock", "demo"] },
+        ]);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -45,15 +64,29 @@ export default function SearchPage() {
           className="w-full max-w-md mb-4 p-2 border rounded-lg"
         />
 
-        <main className="w-full flex flex-col items-center gap-4">
-          {filteredEvents.length > 0 ? (
-            filteredEvents.map((event) => (
-              <EventWidget key={event.id} data={event} />
-            ))
-          ) : (
-            <p>No events found</p>
-          )}
-        </main>
+        {loading ? (
+          <p>Loading events...</p>
+        ) : (
+          <>
+            {error && <p className="text-red-500 mb-2">{error}</p>}
+
+            <main className="w-full flex flex-col items-center gap-4">
+              {filteredEvents.length > 0 ? (
+                filteredEvents.map((event) => (
+                  <EventWidget
+                    key={event.id}
+                    data={{
+                      ...event,
+                      tags: event.tags || [], 
+                    }}
+                  />
+                ))
+              ) : (
+                <p>No events found</p>
+              )}
+            </main>
+          </>
+        )}
       </div>
 
       <BottomNavBar />
