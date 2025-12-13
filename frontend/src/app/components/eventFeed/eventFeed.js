@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { API_URL } from "../../api";
-import Image from "next/image"
+import Image from "next/image";
 
 const EventFeed = () => {
   const router = useRouter();
@@ -10,11 +10,9 @@ const EventFeed = () => {
   const [loading, setLoading] = useState(true);
   const [location, setLocation] = useState(null);
 
-  // Get user's GPS location
   const getUserLocation = () => {
     if (!navigator.geolocation) {
-      console.warn("Geolocation not supported. Using fallback coords.");
-      setLocation({ lat: 37.948544, lng: -91.77153 }); // Rolla, MO
+      setLocation({ lat: 37.948544, lng: -91.77153 });
       return;
     }
 
@@ -25,34 +23,26 @@ const EventFeed = () => {
           lng: pos.coords.longitude,
         });
       },
-      (err) => {
-        console.warn("Location permission denied. Using fallback coords.");
+      () => {
         setLocation({ lat: 37.948544, lng: -91.77153 });
       }
     );
   };
 
-  // Fetch feed once we have location
   const get_feed = async (lat, lng) => {
     try {
-      const distance = 500000000; // 5 km
-      const filters = [];
-
       const response = await fetch("http://localhost:80/events/feed", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           latitude: lat,
           longitude: lng,
-          max_distance: distance,
-          filters: filters,
+          max_distance: 500000000,
+          filters: [],
         }),
       });
 
       const data = await response.json();
-      console.log(data);
       setEvents(data);
     } catch (err) {
       console.error("Error:", err);
@@ -65,12 +55,10 @@ const EventFeed = () => {
     router.push(`/event_page/${id}`);
   };
 
-  // Step 1: Get location
   useEffect(() => {
     getUserLocation();
   }, []);
 
-  // Step 2: Once location exists, fetch events
   useEffect(() => {
     if (location) {
       get_feed(location.lat, location.lng);
@@ -88,14 +76,14 @@ const EventFeed = () => {
       )}
 
       {!loading && events.length > 0 && (
-        <div className="flex flex-col items-center justify-center w-full gap-15">
+        <div className="flex flex-col items-center justify-center w-full gap-6">
           {events.map((event) => (
             <div
               key={event.id}
-              className="min-w-[250px] bg-white border border-gray-400 shadow-md rounded-lg p-4 flex flex-col justify-center items-center w-[80%]"
+              className="min-w-[250px] bg-white border border-gray-300 shadow-md rounded-xl p-5 flex flex-col items-center w-[80%]"
             >
-              <div className="w-full flex gap-3 items-center justify-start">
-                <div className="relative w-12 h-12 flex-shrink-0">
+              <div className="w-full flex gap-3 items-center">
+                <div className="relative w-12 h-12">
                   <Image
                     src={`${API_URL}/profile/picture/${event.organizer_id}`}
                     alt="Profile picture"
@@ -104,30 +92,51 @@ const EventFeed = () => {
                     unoptimized
                   />
                 </div>
-                <h5 className="font-semibold mb-2 underline">
+                <h5 className="font-semibold underline">
                   {event.organizer_first} {event.organizer_last}
                 </h5>
               </div>
-              <h3 className="text-lg font-bold mb-2">{event.name}</h3>
-              <p className="text-gray-600 mb-2">{event.description}</p>
 
-              <p className="text-sm text-gray-500 mb-2">
+              <h3 className="text-lg font-bold mt-2">{event.name}</h3>
+              <p className="text-gray-600 text-center mt-1">{event.description}</p>
+
+              <p className="text-sm text-gray-500 mt-2">
                 Distance: {event.distance} m
               </p>
 
-              <div className="flex flex-wrap gap-1">
+              <div className="flex flex-wrap gap-1 mt-2">
                 {event.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="bg-green-200 text-green-800 text-xs px-2 py-1 rounded"
+                    className="bg-green-200 text-green-800 text-xs px-2 py-1 rounded-full"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
+
               <button
                 onClick={() => handleClickEvent(event.id)}
-                className="rounded-lg "
+                className="
+                  mt-4
+                  px-6
+                  py-2
+                  rounded-full
+                  bg-blue-500
+                  text-white
+                  font-semibold
+                  shadow-md
+                  cursor-pointer
+                  transition-all
+                  duration-200
+                  hover:bg-blue-600
+                  hover:shadow-lg
+                  active:scale-95
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-blue-400
+                  focus:ring-offset-2
+                "
               >
                 Check It Out!
               </button>
