@@ -15,6 +15,13 @@ export default function ProfilePage() {
     username: "na",
     bio: "",
   });
+  const [editMode, setEditMode] = useState(false);
+  const [editData, setEditData] = useState({
+    fname: "",
+    lname: "",
+    bio: "",
+  });
+  const [saving, setSaving] = useState(false);
 
   const [confirmation, setConfirmation] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -61,10 +68,6 @@ export default function ProfilePage() {
       });
 
       const dfp = await response.json();
-
-      dfp.bio =
-        "This is my bio\nI worked very hard on it.\nI like to play games and go to bday parties :).";
-
       setDataForProfile(dfp);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -115,6 +118,53 @@ export default function ProfilePage() {
     viewMode === "attending" ? attendingEvents : organizingEvents;
 
   // -------------------------
+  // Edit Data
+  // -------------------------
+  const startEdit = () => {
+    setEditData({
+      fname: dataForProfile.fname,
+      lname: dataForProfile.lname,
+      bio: dataForProfile.bio || "",
+    });
+    setEditMode(true);
+  };
+
+  const cancelEdit = () => {
+    setEditMode(false);
+    setEditData({ fname: "", lname: "", bio: "" });
+  };
+
+  const saveProfile = async () => {
+    setSaving(true);
+
+    try {
+      const response = await fetch(`${API_URL}/user/update`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(editData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      const result = await response.json();
+
+      // Update UI with confirmed backend data
+      setDataForProfile(result.user);
+      setEditMode(false);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // -------------------------
   // UI Components
   // -------------------------
   return (
@@ -124,18 +174,36 @@ export default function ProfilePage() {
         <div className="flex items-center gap-4">
           <div className="relative w-24 h-24 flex-shrink-0">
             <Image
-              src={`${API_URL}/profile/picture/`}
+              src={`${API_URL}/profile/picture/${dataForProfile.id}`}
               alt="Profile picture"
               fill
-              sizes="96px"
               className="rounded-full object-cover border shadow-sm"
               unoptimized
             />
           </div>
 
-          <h1 className="text-3xl font-bold">
-            {dataForProfile.fname} {dataForProfile.lname}
-          </h1>
+          {editMode ? (
+            <div className="flex gap-2">
+              <input
+                className="border rounded px-2 py-1 text-xl font-bold"
+                value={editData.fname}
+                onChange={(e) =>
+                  setEditData({ ...editData, fname: e.target.value })
+                }
+              />
+              <input
+                className="border rounded px-2 py-1 text-xl font-bold"
+                value={editData.lname}
+                onChange={(e) =>
+                  setEditData({ ...editData, lname: e.target.value })
+                }
+              />
+            </div>
+          ) : (
+            <h1 className="text-3xl font-bold">
+              {dataForProfile.fname} {dataForProfile.lname}
+            </h1>
+          )}
         </div>
 
         <div className="flex flex-col">
@@ -143,9 +211,47 @@ export default function ProfilePage() {
             @{dataForProfile.username}
           </span>
 
-          <pre className="whitespace-pre-wrap text-gray-800 mt-2">
-            {dataForProfile.bio}
-          </pre>
+          <div className="mt-3 flex gap-3">
+            {!editMode ? (
+              <button
+                onClick={startEdit}
+                className="px-4 py-2 border rounded-md hover:bg-gray-100"
+              >
+                Edit Profile
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={saveProfile}
+                  disabled={saving}
+                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
+                >
+                  {saving ? "Saving..." : "Save"}
+                </button>
+
+                <button
+                  onClick={cancelEdit}
+                  className="px-4 py-2 border rounded-md hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+              </>
+            )}
+          </div>
+
+          {editMode ? (
+            <textarea
+              className="border rounded p-2 mt-2 w-full min-h-[100px]"
+              value={editData.bio}
+              onChange={(e) =>
+                setEditData({ ...editData, bio: e.target.value })
+              }
+            />
+          ) : (
+            <pre className="whitespace-pre-wrap text-gray-800 mt-2">
+              {dataForProfile.bio}
+            </pre>
+          )}
         </div>
       </header>
 
