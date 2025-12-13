@@ -47,7 +47,7 @@ services:
       - ./backend:/app
     depends_on:
       - kafka
-    restart: on-failure # Kafka takes about 20 seconds to start for me
+    restart: on-failure 
 
   frontend:
     build:
