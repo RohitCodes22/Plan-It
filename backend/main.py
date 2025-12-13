@@ -248,7 +248,7 @@ def create_event():
     test_str = f"ST_SRID(POINT({data['location']['latitude']}, {data['location']['longitude']}), {data['location']['srid']})"
     print(f"\n\n\n\n\n {test_str} \n\n\n\n\n", flush=True)
 
-    databaseService.create_event(
+    e_id = databaseService.create_event(
         data["name"], 
         data["organizer_id"], 
         data['location']['longitude'],
@@ -257,9 +257,11 @@ def create_event():
         data["description"]
     )
 
+    attend_event(e_id)
+
     # kafka_producer.produce("create_event", encode_event(data))
     # kafka_producer.flush(0)
-    return "Event Created!", SUCCESS
+    return f"{e_id}", SUCCESS
 
 @app.route("/get_event/<event_id>", methods=["GET"])
 def get_event(event_id: int):

@@ -61,6 +61,9 @@ export default function EventCreator() {
         body: JSON.stringify(testData)
     });
 
+    // add to attendee table
+    // const 
+
     closeModal();
   };
 
