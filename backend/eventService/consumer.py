@@ -17,7 +17,7 @@ for _ in range(ATTEMPTS):
 
 
 CONSUMER.subscribe(["create_event"])
-print("Event handler thread started ....")
+print("Event handler thread started ....", flush=True)
 
 while True:
     incoming_msg = CONSUMER.poll(1.0)
@@ -33,8 +33,10 @@ while True:
 
     # go through possible event topics
     if topic == "create_event":
-        event_service.Event.write_event(event["name"], [], 1, "bruh")
-        print("Event created!")
+        print("Creating event!", flush=True)
+        print(event, flush=True)
+        event_service.Event.write_event(event["name"], [], event["organizer_id"], event["description"])
+        print("Event created!", flush=True)
     else: # does not match any known event topics
         print(f"ERROR: unknown event topic passed in: {topic}")
     

@@ -25,6 +25,28 @@ def get_connection():
 #   DATABASE OPERATIONS
 # ============================================================
 
+def make_location_query(table, columns, values):
+    columns = columns.split()
+    columns[-1] += ',' 
+    column_str = ""
+    placeholders = ""
+    LOCATION_STR = "location,"
+    
+
+    # find index of location
+    for i in range(len(columns)):
+        column_str += columns[i] if i == len(columns) - 1 else columns[i][:-1]
+        if columns[i] == LOCATION_STR:
+            placeholders += f'ST_SRID(POINT(%(lon)s, %(lat)s), 4326),'
+        else:
+            placeholders += f'%({columns[i][:-1]})s,'
+            
+    s = f"INSERT INTO {table} ({column_str}) VALUES ({placeholders})"
+    print(s, flush=True)
+    return s
+
+
+
 def write_to_db(table, **kwargs):
     """
     Inserts a row into the specified table.
@@ -41,7 +63,13 @@ def write_to_db(table, **kwargs):
     placeholders = ", ".join(["%s"] * len(kwargs))
     values = tuple(kwargs.values())
 
-    query = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
+    if "location" in columns:
+        query = make_location_query("events", columns, values)
+    else:
+        query = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
+    # extremely jank but I don't want to make this any better
+
+    print(query)
 
     try:
         cursor.execute(query, values)
@@ -181,11 +209,12 @@ def delete_user(user_id):
 # ============================================================
 #   EVENT OPERATIONS
 # ============================================================
-def create_event(name, organizer_id, tags=None, description=None):
+def create_event(name, organizer_id, lon, lat, tags=None, description=None):
     return write_to_db(
         "events",
         name=name,
         organizer_id=organizer_id,
+        location=f"{lon} {lat}",
         tags=tags,
         description=description
     )

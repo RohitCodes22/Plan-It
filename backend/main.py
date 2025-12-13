@@ -191,11 +191,27 @@ def attend_event(event_id: str):
     databaseService.add_attendee(event_id, session.get("user_id"))
     return "Attending event", SUCCESS
 
-@app.route("/create_event/<event_name>", methods=["GET"]) # making GET just for testing in browser
-def create_event(event_name):
-    kafka_producer.produce("create_event", encode_event({"name": event_name}))
-    kafka_producer.flush(0)
-    return f"<h1>{event_name} created!</h1>"
+@app.route("/create_event", methods=["POST"]) # making GET just for testing in browser
+def create_event():
+    if not session.get('logged_in') or session.get('user_id') is None:
+        return {'message': 'not logged in'}, AUTH_ERROR
+    
+    data = request.get_json()
+    test_str = f"ST_SRID(POINT({data['location']['latitude']}, {data['location']['longitude']}), {data['location']['srid']})"
+    print(f"\n\n\n\n\n {test_str} \n\n\n\n\n", flush=True)
+
+    databaseService.create_event(
+        data["name"], 
+        data["organizer_id"], 
+        data['location']['longitude'],
+        data['location']['latitude'],
+        json.dumps(data["tags"]), 
+        data["description"]
+    )
+
+    # kafka_producer.produce("create_event", encode_event(data))
+    # kafka_producer.flush(0)
+    return "Event Created!", SUCCESS
 
 @app.route("/get_event/<event_id>", methods=["GET"])
 def get_event(event_id: int):
