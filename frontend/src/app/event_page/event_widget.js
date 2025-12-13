@@ -60,20 +60,22 @@ export default function EventWidget({ data }) {
     return itemsStr.slice(1, itemsStr.length - 1).replaceAll('"', "").split(",");
   }
 
-  function TagList(items) {
-    const colors = ["blue", "green", "red", "orange", "purple", "yellow"];
-    return (
-      <div className="flex flex-wrap gap-2 mt-2">
-        {items.map((item, index) => (
+function TagList(items) {
+  const colors = ["blue", "green", "red", "orange", "purple", "yellow"];
+  return (
+    <ul className="flex flex-wrap gap-2 mt-2 list-none p-0 m-0">
+      {items.map((item, index) => (
+        <li key={index} className="list-none">
           <TagWidget
-            key={index}
             text={item.trim()}
             color={colors[index % colors.length]}
           />
-        ))}
-      </div>
-    );
-  }
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 
   function Comments() {
     if (!commentData.length) return <p className="text-gray-500">No comments yet.</p>;
