@@ -40,13 +40,12 @@ about the community on a deeper level.
 Technology Stack:
 - Frontend: Next JS
 - Backend: Python FLASK
-- Database: MongoDB
+- Database: MySQL
 - Deployment Platform: AWS
 Expected Outcomes:
 - Our final deliverable will be working backend and frontend prototype of PlanIt which will
 - Allow users to plan and create events
 - Allow users to sign up for interesting events
-- Allow users to make “friends” and send direct messages to those contacts
 
 
 
