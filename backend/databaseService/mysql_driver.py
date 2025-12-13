@@ -420,6 +420,7 @@ def get_user_events(user_id):
         e.name as event_name,
         e.tags as event_tags,
         e.description as event_description,
+        e.e_date as event_date,
         u.username as organizer_username,
         u.fname as organizer_firstname,
         u.lname as organizer_lastname

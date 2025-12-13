@@ -114,61 +114,59 @@ VALUES
 INSERT INTO events (name, tags, description, organizer_id, location, e_date)
 VALUES
 ("Rohit's B-Day!", JSON_ARRAY('fun', 'party'), 'Celebration event', 1,
-    ST_SRID(POINT(-91.771530, 37.948544), 4326), DATE("2025-12-14")
+    ST_SRID(POINT(-91.771530, 37.948544), 4326), DATE('2025-12-14')
 ),
 
-
-INSERT INTO events (name, tags, description, organizer_id, location)
 ("Generic Event", JSON_ARRAY('fun'), 'A simple event', 3,
-    ST_SRID(POINT(-91.773100, 37.949200), 4326)
+    ST_SRID(POINT(-91.773100, 37.949200), 4326), DATE('2025-12-18')
 ),
 
 ("Study Session: Algorithms", JSON_ARRAY('study', 'serious'), '3-hour grind sesh', 5,
-    ST_SRID(POINT(-91.770400, 37.947900), 4326)
+    ST_SRID(POINT(-91.770400, 37.947900), 4326), DATE('2025-12-20')
 ),
 
 ("Boys Night: Pizza & COD", JSON_ARRAY('gaming', 'fun'), 'LAN party + pizza', 6,
-    ST_SRID(POINT(-91.772800, 37.946300), 4326)
+    ST_SRID(POINT(-91.772800, 37.946300), 4326), DATE('2025-12-21')
 ),
 
 ("Continental Meetup", JSON_ARRAY('action', 'serious'), 'No guns on company property.', 7,
-    ST_SRID(POINT(-91.769900, 37.949900), 4326)
+    ST_SRID(POINT(-91.769900, 37.949900), 4326), DATE('2025-12-22')
 ),
 
 ("Council of Elrond", JSON_ARRAY('fantasy', 'middle-earth'), 'Discussing ring-related issues.', 8,
-    ST_SRID(POINT(-91.770800, 37.950400), 4326)
+    ST_SRID(POINT(-91.770800, 37.950400), 4326), DATE('2025-12-23')
 ),
 
 ("Swamp BBQ", JSON_ARRAY('food', 'chaos'), 'You’re invited. Donkey not included.', 9,
-    ST_SRID(POINT(-91.771200, 37.947300), 4326)
+    ST_SRID(POINT(-91.771200, 37.947300), 4326), DATE('2025-12-26')
 ),
 
 ("Dueling Club", JSON_ARRAY('magic', 'danger'), 'Expelliarmus only... please.', 10,
-    ST_SRID(POINT(-91.772200, 37.948800), 4326)
+    ST_SRID(POINT(-91.772200, 37.948800), 4326), DATE('2025-12-28')
 ),
 
 ("Star Command Briefing", JSON_ARRAY('space'), 'To infinity... AND BEYOND!', 11,
-    ST_SRID(POINT(-91.770500, 37.949100), 4326)
+    ST_SRID(POINT(-91.770500, 37.949100), 4326), DATE('2025-12-30')
 ),
 
 ("Malibu Dream Party", JSON_ARRAY('pink', 'fashion'), 'Dress code: Fabulous.', 12,
-    ST_SRID(POINT(-91.773500, 37.947700), 4326)
+    ST_SRID(POINT(-91.773500, 37.947700), 4326), DATE('2025-12-31')
 ),
 
 ("Family Cookout", JSON_ARRAY('family', 'cars'), 'Nothing stronger than family.', 13,
-    ST_SRID(POINT(-91.772600, 37.949500), 4326)
+    ST_SRID(POINT(-91.772600, 37.949500), 4326), DATE('2026-01-02')
 ),
 
 ("Scooby Snack Taste Test", JSON_ARRAY('food', 'mystery'), 'Ruh roh?', 14,
-    ST_SRID(POINT(-91.771800, 37.948200), 4326)
+    ST_SRID(POINT(-91.771800, 37.948200), 4326), DATE('2026-01-04')
 ),
 
 ("Jedi Meditation Circle", JSON_ARRAY('force', 'calm'), 'Much peace. Very quiet.', 15,
-    ST_SRID(POINT(-91.769300, 37.948700), 4326)
+    ST_SRID(POINT(-91.769300, 37.948700), 4326), DATE('2026-01-06')
 ),
 
 ("Stark Expo Demo", JSON_ARRAY('tech', 'showcase'), 'New tech reveal. No explosions expected.', 16,
-    ST_SRID(POINT(-91.770900, 37.946900), 4326)
+    ST_SRID(POINT(-91.770900, 37.946900), 4326), DATE('2026-01-10')
 );
 
 
