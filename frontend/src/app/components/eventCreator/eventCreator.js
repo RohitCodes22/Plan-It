@@ -1,5 +1,6 @@
 import { API_URL } from "@/app/api";
 import React, { useState } from "react";
+import LocationSelector from "./locationSelector";
 
 export default function EventCreator() {
   const [showModal, setShowModal] = useState(false);
@@ -9,6 +10,14 @@ export default function EventCreator() {
     date: "",
     description: "",
   });
+
+  function handleMapSelect(coords) {
+    setEventData({ ...eventData, location: {
+        latitude: coords.lon,
+        longitude: coords.lat,
+        srid: 4326
+    } })
+  }
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -33,16 +42,14 @@ export default function EventCreator() {
     }
     const userData = await userDataRes.json();
     
+    console.log(eventData);
+
     const testData = {
-        name: "Test Event!",
+        name: eventData.name,
         tags: ["cool", "very epic!"],
-        description: "bruh",
+        description: eventData.description,
         organizer_id: userData.id,
-        location: {
-            latitude: -91.771530,
-            longitude: 37.948544,
-            srid: 4326
-        }
+        location: eventData.location
     };
 
     const post = fetch(`${API_URL}/create_event`, {
@@ -93,14 +100,7 @@ export default function EventCreator() {
                 <label className="block text-sm font-medium mb-1">
                   Location
                 </label>
-                <input
-                  type="text"
-                  name="location"
-                  value={eventData.location}
-                  onChange={handleChange}
-                  className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
+                <LocationSelector value={eventData} onSelect={handleMapSelect}/>
               </div>
 
               <div>
