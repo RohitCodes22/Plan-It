@@ -111,12 +111,14 @@ VALUES
 -- ============================================================
 --   FAKE EVENTS (ALL NEAR ROLLA, MO)
 -- ============================================================
-INSERT INTO events (name, tags, description, organizer_id, location)
+INSERT INTO events (name, tags, description, organizer_id, location, e_date)
 VALUES
 ("Rohit's B-Day!", JSON_ARRAY('fun', 'party'), 'Celebration event', 1,
-    ST_SRID(POINT(-91.771530, 37.948544), 4326)
+    ST_SRID(POINT(-91.771530, 37.948544), 4326), DATE("2025-12-14")
 ),
 
+
+INSERT INTO events (name, tags, description, organizer_id, location)
 ("Generic Event", JSON_ARRAY('fun'), 'A simple event', 3,
     ST_SRID(POINT(-91.773100, 37.949200), 4326)
 ),
