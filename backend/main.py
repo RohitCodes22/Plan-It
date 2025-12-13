@@ -244,6 +244,13 @@ def get_event(event_id: int):
         return jsonify(e), NO_CONTENT 
     return jsonify(e), SUCCESS
 
+@app.route("/get_event/all", methods=["GET"])
+def get_all_events():
+    events = eventService.get_all_events()  
+    for e in events:
+        e["location"] = parse_mysql_point(e["location"])
+    return jsonify(events), SUCCESS
+
 @app.get("/events/nearby")
 def get_events_nearby():
     try:
