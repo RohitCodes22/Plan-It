@@ -95,7 +95,7 @@ export default function MyMap() {
   return (
     <div className="flex flex-col-reverse w-full h-[100vh]">
       {/* ------------------------------------------------------------------- */}
-      {/* LEFT SIDEBAR */}
+      {/* Bottom SIDEBAR */}
       {/* ------------------------------------------------------------------- */}
       <div className="flex gap-2 bg-gray-100 border-r overflow-y-auto p-4">
         {events.length === 0 && (
