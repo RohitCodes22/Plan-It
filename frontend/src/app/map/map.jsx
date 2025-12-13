@@ -11,8 +11,7 @@ import L from "leaflet";
 // Custom Marker Icon
 // ---------------------------------------------
 const eventIcon = new L.Icon({
-  iconUrl:
-    "https://scontent-den2-1.xx.fbcdn.net/v/t39.30808-6/497737426_2801846933335814_7260856563532135789_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=bIg3h62SVCAQ7kNvwGS6_-b&_nc_oc=AdncFdwO_AfWsl5XsrLRjYxCl-nAT5b4rnTEORNVeOTrWcpWn3axpIRJ0XV1Nze5T9g&_nc_zt=23&_nc_ht=scontent-den2-1.xx&_nc_gid=XDVYI-CmRphT117fqQsBOw&oh=00_AfktkooRSeZaSNdwZrtVFhdSnZQ-xGAj97JcSX0KhKZwXg&oe=693BED65",
+  iconUrl: "/ronaldo.jpg",
   iconSize: [30, 48],
   iconAnchor: [15, 48],
   popupAnchor: [0, -45],
