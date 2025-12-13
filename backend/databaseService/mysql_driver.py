@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 import bcrypt, json
+import copy
 
 
 # ============================================================
@@ -26,26 +27,37 @@ def get_connection():
 # ============================================================
 
 def make_location_query(table, columns, values):
-    columns = columns.split()
-    columns[-1] += ',' 
-    column_str = ""
-    placeholders = ""
-    LOCATION_STR = "location,"
-    
+    """
+    table: string
+    columns: string like 'a, b, location, c'
+    values: list, where location value is (lon, lat)
+    """
 
-    # find index of location
-    for i in range(len(columns)):
-        column_str += columns[i] if i == len(columns) - 1 else columns[i][:-1]
-        if columns[i] == LOCATION_STR:
-            placeholders += f'ST_SRID(POINT(%(lon)s, %(lat)s), 4326),'
+    cols = [c.strip() for c in columns.split(",")]
+    vals = copy.deepcopy(values)
+
+    col_parts = []
+    val_parts = []
+    params = []
+
+    for col, val in zip(cols, vals):
+        if col == "location":
+            col_parts.append(col)
+            val_parts.append("ST_SRID(POINT(%s, %s), 4326)")
+
+            lon, lat = val
+            params.extend([lat, lon])
         else:
-            placeholders += f'%({columns[i][:-1]})s,'
-            
-    s = f"INSERT INTO {table} ({column_str}) VALUES ({placeholders})"
-    print(s, flush=True)
-    return s
+            col_parts.append(col)
+            val_parts.append("%s")
+            params.append(val)
 
+    sql = f"""
+    INSERT INTO {table} ({', '.join(col_parts)})
+    VALUES ({', '.join(val_parts)})
+    """
 
+    return sql.strip(), params
 
 def write_to_db(table, **kwargs):
     """
@@ -63,13 +75,11 @@ def write_to_db(table, **kwargs):
     placeholders = ", ".join(["%s"] * len(kwargs))
     values = tuple(kwargs.values())
 
-    if "location" in columns:
-        query = make_location_query("events", columns, values)
+    if "location," in columns:
+        # please kill me
+        query, values = make_location_query("events", columns, values)
     else:
         query = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
-    # extremely jank but I don't want to make this any better
-
-    print(query)
 
     try:
         cursor.execute(query, values)
@@ -214,7 +224,7 @@ def create_event(name, organizer_id, lon, lat, tags=None, description=None):
         "events",
         name=name,
         organizer_id=organizer_id,
-        location=f"{lon} {lat}",
+        location=(lon, lat),
         tags=tags,
         description=description
     )
