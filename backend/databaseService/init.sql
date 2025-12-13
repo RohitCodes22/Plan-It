@@ -25,6 +25,7 @@ CREATE TABLE events (
     tags JSON,
     description TEXT,
     organizer_id INT NOT NULL,
+    e_date DATE,
     location POINT NOT NULL SRID 4326,
     SPATIAL INDEX(location),
     FOREIGN KEY (organizer_id) REFERENCES users(id) ON DELETE CASCADE

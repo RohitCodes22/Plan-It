@@ -6,10 +6,6 @@ export const EventView = ({ events }) => {
   const [sortBy, setSortBy] = useState("name");
 
 
-    const addEvent = () => {
-
-    }
-
   // Always call hooks FIRST
   const sortedEvents = useMemo(() => {
     const list = [...events];
