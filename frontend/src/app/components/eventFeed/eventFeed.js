@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_URL } from "../../api";
+import Image from "next/image"
 
 const EventFeed = () => {
   const router = useRouter();
@@ -60,8 +62,8 @@ const EventFeed = () => {
   };
 
   const handleClickEvent = (id) => {
-    router.push(`/event_page/${id}`)
-  }
+    router.push(`/event_page/${id}`);
+  };
 
   // Step 1: Get location
   useEffect(() => {
@@ -92,7 +94,16 @@ const EventFeed = () => {
               key={event.id}
               className="min-w-[250px] bg-white border border-gray-400 shadow-md rounded-lg p-4 flex flex-col justify-center items-center w-[80%]"
             >
-              <div className="w-full flex justify-start">
+              <div className="w-full flex gap-3 items-center justify-start">
+                <div className="relative w-12 h-12 flex-shrink-0">
+                  <Image
+                    src={`${API_URL}/profile/picture/${event.organizer_id}`}
+                    alt="Profile picture"
+                    fill
+                    className="rounded-full object-cover border shadow-sm"
+                    unoptimized
+                  />
+                </div>
                 <h5 className="font-semibold mb-2 underline">
                   {event.organizer_first} {event.organizer_last}
                 </h5>
@@ -114,7 +125,12 @@ const EventFeed = () => {
                   </span>
                 ))}
               </div>
-              <button onClick={() => handleClickEvent(event.id)} className="rounded-lg ">Check It Out!</button>
+              <button
+                onClick={() => handleClickEvent(event.id)}
+                className="rounded-lg "
+              >
+                Check It Out!
+              </button>
             </div>
           ))}
         </div>
