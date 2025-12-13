@@ -1,3 +1,4 @@
+import { API_URL } from "@/app/api";
 import React, { useState } from "react";
 
 export default function EventCreator() {
@@ -15,9 +16,44 @@ export default function EventCreator() {
   const handleChange = (e) =>
     setEventData({ ...eventData, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("New event:", eventData);
+
+    const userDataRes = await fetch(`${API_URL}/get_user_info`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+    if (userDataRes.status == 401) {
+        alert("Please sign in!");
+        return;
+    }
+    const userData = await userDataRes.json();
+    
+    const testData = {
+        name: "Test Event!",
+        tags: ["cool", "very epic!"],
+        description: "bruh",
+        organizer_id: userData.id,
+        location: {
+            latitude: -91.771530,
+            longitude: 37.948544,
+            srid: 4326
+        }
+    };
+
+    const post = fetch(`${API_URL}/create_event`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(testData)
+    });
+
     closeModal();
   };
 
