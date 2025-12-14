@@ -95,7 +95,7 @@ useEffect(() => {
             }`}
           >
             {day}
-            {userEvents ? userEvents[day] : <></>}
+            {userEvents ? userEvents[day - 1] : <></>}
           </div>
         ))}
       </div>
