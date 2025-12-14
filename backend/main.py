@@ -316,6 +316,7 @@ def create_event():
         data["organizer_id"], 
         data['location']['longitude'],
         data['location']['latitude'],
+        data["date"],
         json.dumps(data["tags"]), 
         data["description"]
     )

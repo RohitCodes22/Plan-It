@@ -255,12 +255,13 @@ def update_user_fields(user_id: int, fields: dict) -> bool:
 # ============================================================
 #   EVENT OPERATIONS
 # ============================================================
-def create_event(name, organizer_id, lon, lat, tags=None, description=None):
+def create_event(name, organizer_id, lon, lat, date, tags=None, description=None):
     return write_to_db(
         "events",
         name=name,
         organizer_id=organizer_id,
         location=(lon, lat),
+        e_date=date,
         tags=tags,
         description=description
     )
