@@ -1,17 +1,7 @@
-"use client";
-
 import Image from "next/image";
 import Header from "./components/header/header";
-import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [theme, setTheme] = useState(null);
-
-  useEffect(() => {
-    const savedTheme = window.localStorage.getItem("theme"); // ✅ safe
-    setTheme(savedTheme);
-  }, []);
-
   return (
     <main className="min-h-screen flex flex-col bg-zinc-50 font-sans">
       <Header />
