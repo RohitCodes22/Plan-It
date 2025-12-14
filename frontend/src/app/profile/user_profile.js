@@ -7,7 +7,7 @@ import { EventView } from "../components/eventView/eventView";
 import Image from "next/image";
 import { CiEdit } from "react-icons/ci";
 
-export default function ProfilePage() {
+export default function ProfilePage({ cur_user, id }) {
   // -------------------------
   // State
   // -------------------------
@@ -45,7 +45,7 @@ export default function ProfilePage() {
   // -------------------------
   const get_user_data = async () => {
     try {
-      const res = await fetch(`${API_URL}/get_user_info`, {
+      const res = await fetch(`${API_URL}/get_user_info${ cur_user ? '' : `/${id}` }`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -57,7 +57,7 @@ export default function ProfilePage() {
 
   const get_events = async () => {
     try {
-      const res = await fetch(`${API_URL}/user/get_user_events`, {
+      const res = await fetch(`${API_URL}/user/get_user_events${ cur_user ? '' : `/${id}` }`, {
         credentials: "include",
       });
       const data = await res.json();

@@ -7,7 +7,7 @@ export default function ProfilePage() {
     <div className="min-h-screen flex flex-col items-center bg-white font-sans">
       <Header />
       <main className="pt-20 pb-20">
-        <User_Profile />
+        <User_Profile cur_user={true} id={-1}/>
       </main>
       <BottomNavBar />
     </div>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { API_URL } from "../../api";
 import Image from "next/image";
-
+import UserTag from "../userTag/UserTag";
 const EventFeed = () => {
   const router = useRouter();
   const [events, setEvents] = useState([]);
@@ -92,13 +92,17 @@ const EventFeed = () => {
                     unoptimized
                   />
                 </div>
-                <h5 className="font-semibold underline">
-                  {event.organizer_first} {event.organizer_last}
-                </h5>
+                <UserTag
+                  displayname={`${event.organizer_first} ${event.organizer_last}`}
+                  css={"font-semibold underline"}
+                  user_id={event.organizer_id}
+                />
               </div>
 
               <h3 className="text-lg font-bold mt-2">{event.name}</h3>
-              <p className="text-gray-600 text-center mt-1">{event.description}</p>
+              <p className="text-gray-600 text-center mt-1">
+                {event.description}
+              </p>
 
               <p className="text-sm text-gray-500 mt-2">
                 Distance: {event.distance} m

@@ -4,7 +4,7 @@ import TagWidget from "./tag_widget";
 import CommentWidget from "./comment";
 import CommentInput from "./comment_input";
 import { useEffect, useState } from "react";
-
+import UserTag from "../components/userTag/UserTag";
 export default function EventWidget({ data }) {
   const [organizerData, setOrganizerData] = useState(null);
   const [commentData, setCommentData] = useState([]);
@@ -31,7 +31,9 @@ export default function EventWidget({ data }) {
 
   const getUserData = async () => {
     try {
-      const response = await fetch(`${API_URL}/get_user_info/${data.organizer_id}`);
+      const response = await fetch(
+        `${API_URL}/get_user_info/${data.organizer_id}`
+      );
       const organizer = await response.json();
       setOrganizerData(organizer);
     } catch (error) {
@@ -45,7 +47,9 @@ export default function EventWidget({ data }) {
       const comments = await response.json();
 
       for (let i = 0; i < comments.length; i++) {
-        const userResponse = await fetch(`${API_URL}/get_user_info/${comments[i].user_id}`);
+        const userResponse = await fetch(
+          `${API_URL}/get_user_info/${comments[i].user_id}`
+        );
         const userJson = await userResponse.json();
         comments[i].username = userJson.username;
       }
@@ -57,31 +61,39 @@ export default function EventWidget({ data }) {
 
   function tagStringToList(itemsStr) {
     if (!itemsStr) return [];
-    return itemsStr.slice(1, itemsStr.length - 1).replaceAll('"', "").split(",");
+    return itemsStr
+      .slice(1, itemsStr.length - 1)
+      .replaceAll('"', "")
+      .split(",");
   }
 
-function TagList(items) {
-  const colors = ["blue", "green", "red", "orange", "purple", "yellow"];
-  return (
-    <ul className="flex flex-wrap gap-2 mt-2 list-none p-0 m-0">
-      {items.map((item, index) => (
-        <li key={index} className="list-none">
-          <TagWidget
-            text={item.trim()}
-            color={colors[index % colors.length]}
-          />
-        </li>
-      ))}
-    </ul>
-  );
-}
-
+  function TagList(items) {
+    const colors = ["blue", "green", "red", "orange", "purple", "yellow"];
+    return (
+      <ul className="flex flex-wrap gap-2 mt-2 list-none p-0 m-0">
+        {items.map((item, index) => (
+          <li key={index} className="list-none">
+            <TagWidget
+              text={item.trim()}
+              color={colors[index % colors.length]}
+            />
+          </li>
+        ))}
+      </ul>
+    );
+  }
 
   function Comments() {
-    if (!commentData.length) return <p className="text-gray-500">No comments yet.</p>;
+    if (!commentData.length)
+      return <p className="text-gray-500">No comments yet.</p>;
     console.log(commentData);
     return commentData.map((item, index) => (
-      <CommentWidget username={item.username} text={item.contents} key={index} id={item.user_id}/>
+      <CommentWidget
+        username={item.username}
+        text={item.contents}
+        key={index}
+        id={item.user_id}
+      />
     ));
   }
 
@@ -89,15 +101,21 @@ function TagList(items) {
     getUserData();
     getCommentData();
   }, []);
-
+console.log(organizerData)
   return (
     <div className="w-full bg-white rounded-2xl shadow-md p-6 flex flex-col gap-6 hover:shadow-lg transition-shadow duration-200">
       <header>
         <h1 className="text-3xl font-bold">{data.name}</h1>
         <div className="mt-2 text-gray-600">
           Organized by:{" "}
-          <span className="font-semibold">
-            {organizerData ? organizerData.username : "Loading..."}
+          <span>
+            <UserTag
+              displayname={
+                organizerData ? organizerData.username : "Loading..."
+              }
+              css={"font-semibold"}
+              user_id={organizerData ? organizerData.id : -1}
+            />
           </span>
         </div>
       </header>

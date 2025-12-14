@@ -182,6 +182,21 @@ def get_user_events():
     
     return jsonify(user.get_user_events()), SUCCESS
 
+@app.route('/user/get_user_events/<user_id>', methods=['GET'])
+def get_user_events_by_id(user_id):
+    
+    user_id = int(user_id)
+    
+    if not session.get('logged_in') or session.get('user_id') is None:
+        return {'message': 'not logged in'}, AUTH_ERROR
+    
+    user = userService.User("id", user_id)
+    
+    if not user:
+        return BAD_REQUEST
+    
+    return jsonify(user.get_user_events()), SUCCESS
+
     
 @app.route("/profile/picture/<user_id>", methods=["GET"])
 def get_profile_picture_username(user_id):
