@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import L from "leaflet";
-
+import { API_URL } from "../api";
 // ---------------------------------------------
 // Custom Marker Icon
 // ---------------------------------------------
@@ -151,7 +151,12 @@ export default function MyMap() {
           {events.map((event) => (
             <Marker
               key={event.id}
-              icon={eventIcon}
+              icon={new L.Icon({
+              iconUrl: `${API_URL}/event/picture/${event.id}`,
+              iconSize: [30, 48],
+              iconAnchor: [15, 48],
+              popupAnchor: [0, -45],
+            })}
               position={[event.location.lng, event.location.lat]}
               eventHandlers={{
                 click: () => setSelectedEvent(event),
