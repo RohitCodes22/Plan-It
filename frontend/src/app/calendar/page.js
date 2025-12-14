@@ -7,7 +7,6 @@ import { API_URL } from "../api";
 export default function ProfilePage() {
     const [userEvents, setUserEvents] = useState(null);
 
-
     useEffect(() => {
         async function fetchData() {
             // get events user is attending
@@ -20,12 +19,15 @@ export default function ProfilePage() {
             });
 
             const events = await eventRes.json();
-            console.log(events);
 
-            // extract date information            
+            for (let i = 0; i < events.length; i++) {
+                let date = new Date(events[i].event_date);
+                events[i].day = date.getDate() + 1;
+                events[i].month = date.getMonth() + 1;
+            }
+            setUserEvents(events);
         }
 
-        
         fetchData();
     }, []);
 
@@ -33,7 +35,7 @@ export default function ProfilePage() {
         <div className="min-h-screen flex flex-col items-center bg-white font-sans">
             <Header />
             <main className = "pt-20 pb-20">
-            <Calendar />
+            <Calendar arg_events={userEvents}/>
             </main>
             <BottomNavBar />
         </div>

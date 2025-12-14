@@ -1,12 +1,37 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getCurrentDate } from "./date";
+import CalendarItem from "./calendarItem";
 
-export default function Calendar() {
+export default function Calendar({arg_events}) {
   const [currentDate, setCurrentDate] = useState("");
   const [daysInMonth, setDaysInMonth] = useState([]);
   const [today, setToday] = useState(0);
   const [firstDayOfMonth, setFirstDayOfMonth] = useState(0);
+  const [userEvents, setUserEvents] = useState([]);
+
+function get_days_events(events, daysInMonth) {
+  console.log(events);
+  const dayEvents = Array.from({ length: daysInMonth.length }, () => []); 
+
+  events.forEach((event) => {
+
+    const eventDate = new Date(event.event_date);
+    const dayNum = eventDate.getDate(); // 1-based day
+
+    dayEvents[dayNum].push(
+      <CalendarItem
+        key={event.event_id}         // always give a key when rendering lists
+        title={event.event_name || "Untitled"}
+        time={event.time || ""}
+        color={event.color || "bg-indigo-600"}
+        id={event.event_id}
+      />
+    );
+  })
+
+  return dayEvents;
+}
 
   useEffect(() => {
     const date = new Date();
@@ -21,6 +46,14 @@ export default function Calendar() {
 
     setFirstDayOfMonth(new Date(year, month, 1).getDay());
   }, []);
+
+useEffect(() => {
+  if (arg_events && arg_events.length > 0 && daysInMonth.length > 0) {
+    const dayData = get_days_events(arg_events, daysInMonth);
+    setUserEvents(dayData);
+    console.log(dayData);
+  }
+}, [arg_events, daysInMonth]);
 
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -54,6 +87,7 @@ export default function Calendar() {
             }`}
           >
             {day}
+            {userEvents ? userEvents[day] : <></>}
           </div>
         ))}
       </div>
