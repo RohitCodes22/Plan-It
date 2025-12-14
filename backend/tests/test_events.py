@@ -12,6 +12,7 @@ def test_create_event(client, mocker):
     res = client.post("/create_event", json={
         "name": "Test Event",
         "organizer_id": 1,
+        "date": "2025-12-13",
         "location": {
             "latitude": 37.9,
             "longitude": -91.7,
