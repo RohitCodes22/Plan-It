@@ -41,7 +41,7 @@ jobs:
           cd backend
           pytest
 
-  test-frontend:
+  frontend:
     runs-on: ubuntu-latest
 
     steps:
@@ -56,3 +56,18 @@ jobs:
         run: |
           cd frontend
           npm install
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    needs: test-backend
+  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Deploy
+        run: |
+          echo "Starting deployment..."
+          echo "Pulling latest code"
+          echo "Restarting application"
+          echo "Deployment successful"
