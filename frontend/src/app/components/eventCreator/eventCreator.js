@@ -45,10 +45,11 @@ export default function EventCreator() {
     
     console.log(eventData);
 
-    const testData = {
+    const postData = {
         name: eventData.name,
         tags: ["cool", "very epic!"],
         description: eventData.description,
+        date: eventData.date,
         organizer_id: userData.id,
         location: eventData.location
     };
@@ -59,7 +60,7 @@ export default function EventCreator() {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(testData)
+        body: JSON.stringify(postData)
     });
 
     // add to attendee table

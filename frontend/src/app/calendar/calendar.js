@@ -16,18 +16,26 @@ function get_days_events(events, daysInMonth) {
 
   events.forEach((event) => {
 
-    const eventDate = new Date(event.event_date);
-    const dayNum = eventDate.getDate(); // 1-based day
+    try {
+        const eventDate = new Date(event.event_date);
+        const dayNum = eventDate.getDate(); // 1-based day
 
-    dayEvents[dayNum].push(
-      <CalendarItem
-        key={event.event_id}         // always give a key when rendering lists
-        title={event.event_name || "Untitled"}
-        time={event.time || ""}
-        color={event.color || "bg-indigo-600"}
-        id={event.event_id}
-      />
-    );
+        
+        dayEvents[dayNum].push(
+            <CalendarItem
+                key={event.event_id}         // always give a key when rendering lists
+                title={event.event_name || "Untitled"}
+                time={event.time || ""}
+                color={event.color || "bg-indigo-600"}
+                id={event.event_id}
+            />
+        );        
+    }
+    catch {
+        console.log(`error when processing event:`)
+        console.log(event);
+    }
+
   })
 
   return dayEvents;
