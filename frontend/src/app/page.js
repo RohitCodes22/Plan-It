@@ -8,8 +8,10 @@ export default function Home() {
   const [theme, setTheme] = useState(null);
 
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem("theme"); // ✅ safe
-    setTheme(savedTheme);
+    if (typeof window !== "undefined") {
+      const savedTheme = window.localStorage.getItem("theme");
+      setTheme(savedTheme);
+    }
   }, []);
 
   return (
