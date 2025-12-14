@@ -43,6 +43,12 @@ export default function SignUpPage() {
         return;
       }
 
+    await fetch(`${API_URL}/notificatons/new_user`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
       setMessage("Sign Up successful!");
       setPopup(true);
       setTimeout(() => {

@@ -14,6 +14,7 @@ import eventService
 import userService
 import confluent_kafka
 import databaseService
+from notification_service import emailer
 
 '''
 ----------------------
@@ -285,7 +286,24 @@ def update_profile_image():
         "image_url": f"/profile/picture/{user.id}"
     }), 200
 
+"""
+----------------------
+API Notification Endpoints
+----------------------
+"""
 
+@app.route("/notificatons/new_user", methods=["POST"])
+def notify_new_user():
+    if not session.get('logged_in') or session.get('user_id') is None:
+        return {'message': 'not logged in'}, AUTH_ERROR
+
+    data = databaseService.get_user_by_id(session.get('user_id'))
+
+    print(data, flush=True)
+
+    emailer.send_email(emailer.generate_new_user_email(data["username"], data["email"]))
+
+    return "Attending event", SUCCESS
 """
 ----------------------
 API Event Endpoints (Kafka)
