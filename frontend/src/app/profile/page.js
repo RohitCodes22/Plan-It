@@ -1,5 +1,3 @@
-"use client";
-
 import Header from "../components/header/header_logged_in";
 import User_Profile from "./user_profile";
 import React from "react";
