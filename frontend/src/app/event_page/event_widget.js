@@ -101,7 +101,7 @@ export default function EventWidget({ data }) {
     getUserData();
     getCommentData();
   }, []);
-console.log(organizerData)
+
   return (
     <div className="w-full bg-white rounded-2xl shadow-md p-6 flex flex-col gap-6 hover:shadow-lg transition-shadow duration-200">
       <header>

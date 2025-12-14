@@ -34,11 +34,12 @@ CORS(app,
      supports_credentials=True)
 #CORS(app, origins=["http://localhost:3000"]) # allow outside source (frontend)
 UPLOADS_DIR = os.path.join(os.path.dirname(__file__), "uploads")
+EVENT_UPLOAD_DIR = os.path.join(UPLOADS_DIR, "event_uploads")
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
 # Ensure uploads folder exsits
 os.makedirs(UPLOADS_DIR, exist_ok=True)
-
+os.makedirs(EVENT_UPLOAD_DIR, exist_ok=True)
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -338,7 +339,7 @@ def create_event():
 
     # kafka_producer.produce("create_event", encode_event(data))
     # kafka_producer.flush(0)
-    return f"{e_id}", SUCCESS
+    return jsonify({"id": f"{e_id}"}), SUCCESS
 
 @app.route("/get_event/<event_id>", methods=["GET"])
 def get_event(event_id: int):
@@ -385,6 +386,44 @@ def event_feed_endpoint():
 
     events = eventService.generate_event_feed((lat, long), filters, max_distance, num_events)
     return jsonify(events), SUCCESS
+
+
+
+@app.route("/event/update_event_image/<event_id>", methods=["POST"])
+def add_event_image(event_id):
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), AUTH_ERROR
+
+    if "image" not in request.files:
+        return jsonify({"error": "No image provided"}), BAD_REQUEST
+
+    file = request.files["image"]
+
+    if file.filename == "":
+        print("this one", flush=True)
+        return jsonify({"error": "Empty filename"}), BAD_REQUEST
+
+    if not allowed_file(file.filename):
+        return jsonify({"error": "Invalid file type"}), BAD_REQUEST
+
+    print("WE MADE IT TO THIS POINT", flush=True)
+    
+    ext = file.filename.rsplit(".", 1)[1].lower()
+    filename = f"event_{event_id}.{ext}"
+    filepath = os.path.join(EVENT_UPLOAD_DIR, filename)
+
+    # Delete existing image with same username
+    for f in os.listdir(EVENT_UPLOAD_DIR):
+        if f.startswith(f"event_{event_id}" + "."):
+            os.remove(os.path.join(EVENT_UPLOAD_DIR, f))
+
+    # Save new image
+    print("saving to ", filepath, flush=True)
+    file.save(filepath)
+
+    return jsonify({
+        "message": "Event image updated"
+    }), 200
 
 '''
 ----------------------

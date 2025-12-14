@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import logo from "../header/Plan.png"
+import logo from "./Plan.png"
 
 export default function Header() {
   return (

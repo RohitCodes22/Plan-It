@@ -6,7 +6,7 @@ export default function PhotoUpload({ onChange, multiple = false }) {
   function handleFileChange(e) {
     const files = Array.from(e.target.files);
     setPreviews(files.map(file => URL.createObjectURL(file)));
-    onChange?.(files);
+    onChange(files);
   }
 
   return (

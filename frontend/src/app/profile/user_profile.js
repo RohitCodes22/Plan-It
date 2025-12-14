@@ -123,6 +123,7 @@ export default function ProfilePage({ cur_user, id }) {
 
       // Update image if changed
       if (imageFile) {
+        console.log(imageFile)
         const formData = new FormData();
         formData.append("image", imageFile);
 

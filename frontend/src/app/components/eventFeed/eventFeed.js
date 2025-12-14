@@ -83,15 +83,17 @@ const EventFeed = () => {
               className="min-w-[250px] bg-white border border-gray-300 shadow-md rounded-xl p-5 flex flex-col items-center w-[80%]"
             >
               <div className="w-full flex gap-3 items-center">
-                <div className="relative w-12 h-12">
+                <div className="w-10 h-10 rounded-full overflow-hidden">
                   <Image
                     src={`${API_URL}/profile/picture/${event.organizer_id}`}
                     alt="Profile picture"
-                    fill
-                    className="rounded-full object-cover border shadow-sm"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-cover"
                     unoptimized
                   />
                 </div>
+
                 <UserTag
                   displayname={`${event.organizer_first} ${event.organizer_last}`}
                   css={"font-semibold underline"}
