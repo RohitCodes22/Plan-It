@@ -5,14 +5,16 @@ import CommentWidget from "./comment";
 import CommentInput from "./comment_input";
 import { useEffect, useState } from "react";
 import UserTag from "../components/userTag/UserTag";
+import Image from "next/image";
+
 export default function EventWidget({ data }) {
   const [organizerData, setOrganizerData] = useState(null);
   const [commentData, setCommentData] = useState([]);
   const [isAttending, setIsAttending] = useState(false);
 
   const onCommentCreate = (comment) => {
-    setCommentData((curValue) => [
-      ...curValue,
+    setCommentData((cur) => [
+      ...cur,
       { username: comment.username, contents: comment.contents },
     ]);
   };
@@ -29,123 +31,121 @@ export default function EventWidget({ data }) {
     else setIsAttending(true);
   };
 
-  const getUserData = async () => {
-    try {
-      const response = await fetch(
+  useEffect(() => {
+    (async () => {
+      const userRes = await fetch(
         `${API_URL}/get_user_info/${data.organizer_id}`
       );
-      const organizer = await response.json();
-      setOrganizerData(organizer);
-    } catch (error) {
-      console.error("Error fetching organizer data:", error);
-    }
-  };
+      setOrganizerData(await userRes.json());
 
-  const getCommentData = async () => {
-    try {
-      const response = await fetch(`${API_URL}/get_comments/${data.id}`);
-      const comments = await response.json();
+      const commentRes = await fetch(`${API_URL}/get_comments/${data.id}`);
+      const comments = await commentRes.json();
 
-      for (let i = 0; i < comments.length; i++) {
-        const userResponse = await fetch(
-          `${API_URL}/get_user_info/${comments[i].user_id}`
-        );
-        const userJson = await userResponse.json();
-        comments[i].username = userJson.username;
+      for (let c of comments) {
+        const u = await fetch(`${API_URL}/get_user_info/${c.user_id}`);
+        c.username = (await u.json()).username;
       }
       setCommentData(comments);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    }
-  };
-
-  function tagStringToList(itemsStr) {
-    if (!itemsStr) return [];
-    return itemsStr
-      .slice(1, itemsStr.length - 1)
-      .replaceAll('"', "")
-      .split(",");
-  }
-
-  function TagList(items) {
-    const colors = ["blue", "green", "red", "orange", "purple", "yellow"];
-    return (
-      <ul className="flex flex-wrap gap-2 mt-2 list-none p-0 m-0">
-        {items.map((item, index) => (
-          <li key={index} className="list-none">
-            <TagWidget
-              text={item.trim()}
-              color={colors[index % colors.length]}
-            />
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
-  function Comments() {
-    if (!commentData.length)
-      return <p className="text-gray-500">No comments yet.</p>;
-    console.log(commentData);
-    return commentData.map((item, index) => (
-      <CommentWidget
-        username={item.username}
-        text={item.contents}
-        key={index}
-        id={item.user_id}
-      />
-    ));
-  }
-
-  useEffect(() => {
-    getUserData();
-    getCommentData();
+    })();
   }, []);
 
+  const tags =
+    data.tags
+      ?.slice(1, data.tags.length - 1)
+      .replaceAll('"', "")
+      .split(",") ?? [];
+
   return (
-    <div className="w-full bg-white rounded-2xl shadow-md p-6 flex flex-col gap-6 hover:shadow-lg transition-shadow duration-200">
-      <header>
-        <h1 className="text-3xl font-bold">{data.name}</h1>
-        <div className="mt-2 text-gray-600">
-          Organized by:{" "}
-          <span>
+    <article className="w-full">
+      {/* HERO */}
+      <section className="relative h-[420px]">
+        <Image
+          src={`${API_URL}/event/picture/${data.id}`}
+          alt={data.name}
+          fill
+          priority
+          unoptimized
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50" />
+
+        <div className="absolute bottom-0 w-full px-12 pb-10 text-white">
+          <h1 className="text-5xl font-bold mb-2">{data.name}</h1>
+          <p className="text-lg opacity-90">
+            Organized by{" "}
             <UserTag
               displayname={
                 organizerData ? organizerData.username : "Loading..."
               }
-              css={"font-semibold"}
-              user_id={organizerData ? organizerData.id : -1}
+              user_id={organizerData?.id ?? -1}
+              css="text-white font-semibold underline underline-offset-4"
             />
-          </span>
+          </p>
         </div>
-      </header>
-
-      <section>
-        <h2 className="text-xl font-semibold mt-2">Tags</h2>
-        {TagList(tagStringToList(data.tags))}
       </section>
 
-      <section>
-        <h2 className="text-xl font-semibold mt-4">Description</h2>
-        <p className="mt-2 text-gray-700">{data.description}</p>
-      </section>
+      {/* CONTENT */}
+      <section className="max-w-7xl mx-auto px-10 py-16 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-16">
+        {/* MAIN COLUMN */}
+        <div>
+          <h2 className="text-3xl font-semibold mb-6">About</h2>
+          <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap mb-16">
+            {data.description}
+          </p>
 
-      <button
-        onClick={onAttend}
-        className={`mt-4 px-4 py-2 rounded-lg text-white font-semibold ${
-          isAttending
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-blue-500 hover:bg-blue-600 cursor-pointer"
-        }`}
-      >
-        {isAttending ? "Attending" : "Attend!"}
-      </button>
+          {/* COMMENTS */}
+          <div className="border-t pt-10">
+            <h2 className="text-3xl font-semibold mb-6">Discussion</h2>
 
-      <section className="mt-6">
-        <h2 className="text-2xl font-semibold">Comments</h2>
-        <CommentInput callback={onCommentCreate} eventId={data.id} />
-        <div className="mt-4 flex flex-col gap-3">{Comments()}</div>
+            <div className="mb-8">
+              <CommentInput callback={onCommentCreate} eventId={data.id} />
+            </div>
+
+            <div className="space-y-8">
+              {commentData.length ? (
+                commentData.map((c, i) => (
+                  <CommentWidget
+                    key={i}
+                    username={c.username}
+                    text={c.contents}
+                    id={c.user_id}
+                  />
+                ))
+              ) : (
+                <p className="italic text-gray-500">
+                  No comments yet — start the conversation.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* SIDEBAR */}
+        <aside className="sticky top-24 h-fit space-y-10">
+          {/* ATTEND */}
+          <button
+            onClick={onAttend}
+            disabled={isAttending}
+            className={`w-full py-4 rounded-xl text-lg font-semibold transition ${
+              isAttending
+                ? "bg-gray-300 text-gray-700 cursor-not-allowed"
+                : "bg-black text-white hover:bg-gray-900"
+            }`}
+          >
+            {isAttending ? "✓ Attending" : "Attend Event"}
+          </button>
+
+          {/* TAGS */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Tags</h3>
+            <div className="flex flex-wrap gap-2">
+              {tags.map((t, i) => (
+                <TagWidget key={i} text={t.trim()} />
+              ))}
+            </div>
+          </div>
+        </aside>
       </section>
-    </div>
+    </article>
   );
 }

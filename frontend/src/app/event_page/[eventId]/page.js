@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "../../components/header/header";
+import Header from "../../components/header/header_logged_in";
 import BottomNavBar from "../../components/bottomNavBar/bottom_nav_bar";
 import EventWidget from "../event_widget";
 import { API_URL } from "../../api";
@@ -34,9 +34,9 @@ export default function EventPage({params}) {
     }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-white font-sans pb-20">
+    <div >
       <Header />
-      <main className="w-full max-w-md rounded-2xl shadow-lg p-10 border">
+      <main >
         {
             eventData ? <EventWidget data={eventData}/> : <h1> Loading ...</h1>
         }

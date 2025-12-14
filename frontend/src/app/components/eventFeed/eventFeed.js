@@ -122,12 +122,13 @@ const EventFeed = () => {
                 ))}
               </div>
 
-              <div className="relative w-48 h-48 sm:w-64 sm:h-64 overflow-hidden">
+              <div className="w-[300px] h-[300px] overflow-hidden flex items-center justify-center">
                 <Image
                   src={`${API_URL}/event/picture/${event.id}`}
                   alt="Event image"
-                  fill
-                  className="object-cover"
+                  width={300}
+                  height={300}
+                  className="object-cover w-[300px] h-[300px]"
                   unoptimized
                 />
               </div>
