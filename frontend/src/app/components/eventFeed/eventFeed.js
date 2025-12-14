@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { API_URL } from "../../api";
 import Image from "next/image";
 import UserTag from "../userTag/UserTag";
+
 const EventFeed = () => {
   const router = useRouter();
   const [events, setEvents] = useState([]);
@@ -119,6 +120,16 @@ const EventFeed = () => {
                     {tag}
                   </span>
                 ))}
+              </div>
+
+              <div className="relative w-48 h-48 sm:w-64 sm:h-64 overflow-hidden">
+                <Image
+                  src={`${API_URL}/event/picture/${event.id}`}
+                  alt="Event image"
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
               </div>
 
               <button

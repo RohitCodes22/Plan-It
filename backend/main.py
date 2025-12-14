@@ -425,6 +425,30 @@ def add_event_image(event_id):
         "message": "Event image updated"
     }), 200
 
+@app.route("/event/picture/<event_id>", methods=["GET"])
+def get_event_picture_username(event_id):
+    
+    if not session.get('logged_in') or session.get('user_id') is None:
+            return {'message': 'not logged in'}, AUTH_ERROR
+        
+    if not event_id:
+        return {'message': 'not logged in'}, AUTH_ERROR
+
+
+    # Try supported extensions
+    for ext in ("jpg", "jpeg", "png", "webp"):
+        filename = f"event_{event_id}.{ext}"
+        filepath = os.path.join(EVENT_UPLOAD_DIR, filename)
+
+        if os.path.exists(filepath):
+            return send_from_directory(EVENT_UPLOAD_DIR, filename)
+
+    # Fallback
+    return send_from_directory(
+        UPLOADS_DIR,
+        "unknown_rohit.jpg"
+    )
+
 '''
 ----------------------
 API Comments Endpoints
