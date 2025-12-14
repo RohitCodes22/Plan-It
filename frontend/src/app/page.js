@@ -5,19 +5,18 @@ import Header from "./components/header/header";
 import { useEffect, useState } from "react";
 
 function Home() {
+
+}
+
+
+export default function Home() {
   const [theme, setTheme] = useState(null);
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem("theme"); // ✅ safe
     setTheme(savedTheme);
   }, []);
-
-  return <div>Theme: {theme}</div>;
-}
-
-
-export default function Home() {
-
+  
   return (
     <main className="min-h-screen flex flex-col bg-zinc-50 font-sans">
       <Header />
