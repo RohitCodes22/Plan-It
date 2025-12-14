@@ -12,10 +12,11 @@ export default function MyPage() {
   return (
     <div>
       <Header />
-      <main className="flex-1 mb-15">
+      <main className="flex-1 -z-10 mb-15">
         <Map />
       </main>
-      <BottomNavBar />
+      <div className="z-10"><BottomNavBar /></div>
+      
     </div>
   );
 }

@@ -16,7 +16,6 @@ export default function CommentInput(args) {
             return;
 
         setComment(textEl.value); // update comment state
-
         // grow or shrink component (trick I saw on GitHub)
         textEl.style.height = "auto";
         textEl.style.height = textEl.scrollHeight + 'px';
@@ -27,6 +26,7 @@ export default function CommentInput(args) {
         if (!buttonEl || isInputEmpty())
             return;
 
+        
 
         // get current user ID
         const userResponse = await fetch(`${API_URL}/get_user_info`, {
@@ -67,6 +67,7 @@ export default function CommentInput(args) {
             console.log("HTTP error!");
         }
         console.log("comment made!")
+        textareaRef.current.value = "";
 
     }
 

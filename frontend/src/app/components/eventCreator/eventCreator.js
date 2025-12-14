@@ -2,7 +2,7 @@
 
 import { API_URL } from "@/app/api";
 import React, { useState } from "react";
-import LocationSelector from "./locationSelector";
+import LocationSelector from "./locationSelectorWrapper";
 import PhotoUpload from "./photoUpload";
 
 export default function EventCreator() {

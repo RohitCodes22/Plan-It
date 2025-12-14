@@ -11,7 +11,7 @@ export default function EventWidget({ data }) {
   const [organizerData, setOrganizerData] = useState(null);
   const [commentData, setCommentData] = useState([]);
   const [isAttending, setIsAttending] = useState(false);
-
+  console.log(data);
   const onCommentCreate = (comment) => {
     setCommentData((cur) => [
       ...cur,
@@ -122,6 +122,16 @@ export default function EventWidget({ data }) {
 
         {/* SIDEBAR */}
         <aside className="sticky top-24 h-fit space-y-10">
+          <div className=" flex gap-2 text-2xl">
+            <aside className="font-bold">
+              {new Date(data.e_date).toLocaleDateString("en-US", {
+                weekday: "short",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </aside>
+          </div>
           {/* ATTEND */}
           <button
             onClick={onAttend}
