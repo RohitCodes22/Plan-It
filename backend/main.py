@@ -294,12 +294,7 @@ API Notification Endpoints
 
 @app.route("/notificatons/new_user", methods=["POST"])
 def notify_new_user():
-    if not session.get('logged_in') or session.get('user_id') is None:
-        return {'message': 'not logged in'}, AUTH_ERROR
-
-    data = databaseService.get_user_by_id(session.get('user_id'))
-
-    print(data, flush=True)
+    data = request.get_json()
 
     emailer.send_email(emailer.generate_new_user_email(data["username"], data["email"]))
 
