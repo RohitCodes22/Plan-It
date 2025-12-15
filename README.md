@@ -41,7 +41,7 @@ Technology Stack:
 - Frontend: Next JS
 - Backend: Python FLASK
 - Database: MySQL
-- Deployment Platform: AWS
+- Deployment Platform: Vercel for Frontend, Render for Backend
 Expected Outcomes:
 - Our final deliverable will be working backend and frontend prototype of PlanIt which will
 - Allow users to plan and create events
@@ -53,4 +53,4 @@ Expected Outcomes:
 ## Running The Website
 1. Run docker-composer.yml with docker 
 ``` docker compose up ```
-1. Navigigate to http:\\\\localhost:300
+1. Navigate to http:\\\\localhost:300
